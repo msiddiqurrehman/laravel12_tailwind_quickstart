@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+use Illuminate\Support\Facades\DB;
+
 class ModuleSeeder extends Seeder
 {
     /**
@@ -18,6 +20,7 @@ class ModuleSeeder extends Seeder
             ['name' => 'Users', 'slug' => 'users', 'created_by' => 1],
             ['name' => 'Roles', 'slug' => 'roles', 'created_by' => 1],
             ['name' => 'Permissions', 'slug' => 'permissions', 'created_by' => 1],
+            ['name' => 'Designations', 'slug' => 'designations', 'created_by' => 1],
         ]);
     }
 }
