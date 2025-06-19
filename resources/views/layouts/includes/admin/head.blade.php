@@ -13,4 +13,4 @@
 
 <!-- Scripts -->
 <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
-@vite(['resources/css/tailadmin.css', 'resources/js/tailadmin/index.js'])
+@vite(['resources/css/app.css', 'resources/js/tailadmin/app.js'])
