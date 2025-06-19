@@ -24,7 +24,9 @@ class AuthenticateAdmin
 
             $request->session()->regenerateToken();
 
-            return redirect('/');
+            return redirect('/')->withErrors([
+                    'auth_error' => 'Unauthorized access.',
+                ]);
         }
 
         return $next($request);
