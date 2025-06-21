@@ -22,6 +22,7 @@
                 @include('layouts.includes.admin.header')
 
                 <main>
+                    @include('layouts.includes.errors')
                     {{ $slot }}
                 </main>
             </div>

@@ -18,8 +18,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'contact_no',
+        'sec_contact_no',
         'password',
     ];
 
@@ -54,5 +57,25 @@ class User extends Authenticatable
     public function isUserAdmin(): bool
     {
         return $this->user_type_id == 1;
+    }
+
+    /**
+     * Check if User is a partner.
+     *
+     * @return boolean
+     */
+    public function isUserPartner(): bool
+    {
+        return $this->user_type_id == 2;
+    }
+
+    /**
+     * Check if User is a customer.
+     *
+     * @return boolean
+     */
+    public function isUserCustomer(): bool
+    {
+        return $this->user_type_id == 3;
     }
 }

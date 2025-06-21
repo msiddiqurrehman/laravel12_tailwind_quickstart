@@ -100,7 +100,7 @@
       </button>
       <!-- Application nav menu button -->
 
-      <div class="hidden lg:block">
+      <!-- <div class="hidden lg:block">
         <form>
           <div class="relative">
             <span class="absolute top-1/2 left-4 -translate-y-1/2">
@@ -136,7 +136,7 @@
             </button>
           </div>
         </form>
-      </div>
+      </div> -->
     </div>
 
     <div
@@ -662,7 +662,7 @@
           >
             <li>
               <a
-                href="profile.html"
+                href="{{route('admin.profile.edit')}}"
                 class="group text-theme-sm flex items-center gap-3 rounded-lg px-3 py-2 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
                 <svg
