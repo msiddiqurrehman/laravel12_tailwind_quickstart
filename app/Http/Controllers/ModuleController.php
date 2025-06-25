@@ -13,7 +13,7 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        //
+        return view('modules.index');
     }
 
     /**
@@ -21,7 +21,7 @@ class ModuleController extends Controller
      */
     public function create()
     {
-        //
+        dd('modules create new');
     }
 
     /**
@@ -29,7 +29,7 @@ class ModuleController extends Controller
      */
     public function store(StoreModuleRequest $request)
     {
-        //
+        dd('modules save new');
     }
 
     /**
@@ -37,7 +37,7 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
-        //
+        dd('modules show details');
     }
 
     /**
@@ -45,7 +45,7 @@ class ModuleController extends Controller
      */
     public function edit(Module $module)
     {
-        //
+        dd('modules edit');
     }
 
     /**
@@ -53,7 +53,7 @@ class ModuleController extends Controller
      */
     public function update(UpdateModuleRequest $request, Module $module)
     {
-        //
+        dd('modules update');
     }
 
     /**
@@ -61,6 +61,6 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module)
     {
-        //
+        dd('modules delete');
     }
 }

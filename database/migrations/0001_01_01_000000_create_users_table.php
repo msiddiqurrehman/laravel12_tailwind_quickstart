@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('sec_contact_no', length: 16)->nullable()->index();
             $table->string('password');
             $table->rememberToken();
+            $table->tinyInteger('status')->default(1)->index()->comment('0 -> Inactive, 1 -> Active');
             $table->foreignId('created_by')->nullable()->comment('foreign key to users.id')->constrained('users')->onUpdate('cascade')->nullOnDelete();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

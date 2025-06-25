@@ -28,10 +28,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if(url()->previousPath() == "/admin/login")
-            return redirect()->intended(route('admin.dashboard', absolute: false));
+        /**
+         * condition has been added to force admin users login through
+         * specific page only.
+         * url()->previousPath() == "/connect/administrator/login" 
+         */
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if($request->user()->isUserAdmin() && url()->previousPath() == "/connect/administrator/login")
+            $route = 'admin.dashboard';
+        else
+            $route = 'dashboard';
+
+        return redirect()->intended(route($route, absolute: false));
     }
 
     /**

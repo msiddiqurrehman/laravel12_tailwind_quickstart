@@ -9,10 +9,14 @@
   >
     <a href="{{route('admin.dashboard')}}">
       <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-        <img class="dark:hidden" src="{{asset('images/logo.png')}}" alt="Logo" />
+        <img class="dark:hidden" 
+              src="{{asset('images/admin/logo.png')}}" 
+              alt="Logo" 
+        />
+        
         <img
           class="hidden dark:block"
-          src="{{asset('images/logo.png')}}"
+          src="{{asset('images/admin/logo.png')}}"
           alt="Logo"
         />
       </span>
