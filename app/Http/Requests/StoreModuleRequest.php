@@ -11,7 +11,7 @@ class StoreModuleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreModuleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => ['required', 'integer', 'digits:1', 'in:0,1'],
+            'name' => ['required', 'string'],
+            'slug' => ['required', 'alpha_dash:ascii', 'unique:App\Models\Module'],
         ];
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -77,5 +79,21 @@ class User extends Authenticatable
     public function isUserCustomer(): bool
     {
         return $this->user_type_id == 3;
+    }
+
+    /**
+     * Get the user who created this user.
+     */
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Get the designation of the user.
+     */
+    public function designation(): BelongsTo
+    {
+        return $this->belongsTo(Designation::class);
     }
 }

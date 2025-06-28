@@ -4,13 +4,25 @@
         @include('layouts.includes.admin.head')
     </head>
     <body class="font-sans antialiased"
-          x-data="{ page: 'ecommerce', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+          x-data="{ 
+                    page: 'ecommerce', 
+                    'loaded': true, 
+                    'darkMode': false, 
+                    'stickyMenu': false, 
+                    'sidebarToggle': false, 
+                    'scrollTop': false, 
+                    'showConfirmDeleteModal': false,
+                    'confirmModalMsg':'',
+                    'formToDeleteId':''
+                }"
             x-init="
                 darkMode = JSON.parse(localStorage.getItem('darkMode'));
                 $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
             :class="{'dark bg-gray-900': darkMode === true}"
     >
         
+        <x-confirm-delete-modal/>
+
         <x-preloader/>
 
         <div class="flex h-screen overflow-hidden">

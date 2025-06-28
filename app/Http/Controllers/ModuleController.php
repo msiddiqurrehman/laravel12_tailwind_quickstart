@@ -6,6 +6,9 @@ use App\Http\Requests\StoreModuleRequest;
 use App\Http\Requests\UpdateModuleRequest;
 use App\Models\Module;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
+
 class ModuleController extends Controller
 {
     /**
@@ -13,7 +16,15 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        return view('modules.index');
+        try {
+            $modules = Module::orderByDesc('id')->paginate(25);
+            // dd($campaigns->toArray());
+            return view('modules.index', ['dataItems' => $modules]);
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - List Modules - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while rendering the page. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -21,7 +32,7 @@ class ModuleController extends Controller
      */
     public function create()
     {
-        dd('modules create new');
+        return view('modules.create');
     }
 
     /**
@@ -29,7 +40,16 @@ class ModuleController extends Controller
      */
     public function store(StoreModuleRequest $request)
     {
-        dd('modules save new');
+        try{
+            $module_data = $request->validated();
+            $module_data['created_by'] = $request->user()->id;
+            Module::create($module_data);
+            return redirect()->route('admin.modules.index')->withSuccess('Module Added Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Create Module - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -61,6 +81,15 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module)
     {
-        dd('modules delete');
+        try {
+            $moduleName = $module->name;
+            $module->delete();
+            return back()->withSuccess("Module \"$moduleName\" deleted successfully.");
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Delete Module - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while deleting the module. Error Log ID: $logid."]);
+        }
+        
     }
 }

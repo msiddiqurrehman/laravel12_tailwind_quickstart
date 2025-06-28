@@ -67,11 +67,11 @@
       </button>
       <!-- Hamburger Toggle BTN -->
 
-      <a href="index.html" class="lg:hidden">
-        <img class="dark:hidden" src="./images/logo/logo.svg" alt="Logo" />
+      <a href="{{route('admin.dashboard')}}" class="lg:hidden">
+        <img class="dark:hidden w-15" src="{{asset('images/logo_icon.jpg')}}" alt="Logo" />
         <img
-          class="hidden dark:block"
-          src="./images/logo/logo-dark.svg"
+          class="hidden dark:block w-15"
+          src="{{asset('images/logo_icon.jpg')}}"
           alt="Logo"
         />
       </a>
