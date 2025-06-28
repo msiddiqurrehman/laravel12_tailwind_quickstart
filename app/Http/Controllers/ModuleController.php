@@ -57,7 +57,7 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
-        dd('modules show details');
+        return redirect()->route('admin.modules.index');
     }
 
     /**
