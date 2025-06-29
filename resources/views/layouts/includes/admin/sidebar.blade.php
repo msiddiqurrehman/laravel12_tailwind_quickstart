@@ -2,6 +2,7 @@
   $routeName = request()->route()->getName();
   $routeNameArr = explode('.', $routeName);
   $moduleName = ucwords($routeNameArr[1]);
+  // echo $moduleName;
 @endphp
 <aside
   :class="sidebarToggle ? 'translate-x-0 lg:w-[90px]' : '-translate-x-full'"
@@ -212,6 +213,107 @@
             <!-- Dropdown Menu End -->
           </li>
           <!-- Menu Item Modules -->
+
+          <!-- Menu Item UserTypes -->
+          <li>
+            <a
+              href="#"
+              @click.prevent="selected = (selected === 'UserTypes' ? '':'UserTypes')"
+              @class([
+                      'menu-item', 
+                      'group',
+                      'menu-item-active' => $moduleName === 'UserTypes',
+                      'menu-item-inactive' => $moduleName != 'UserTypes'
+                    ])
+              :class=" (selected === 'UserTypes') || (page === 'admin.userTypes.index' || page === 'admin.userTypes.create') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+              <svg
+                @class([
+                  'menu-item-icon-active' => $moduleName === 'UserTypes',
+                  'menu-item-icon-inactive' => $moduleName != 'UserTypes'
+                ])
+                :class="(selected === 'UserTypes') || (page === 'admin.userTypes.index' || page === 'admin.userTypes.create') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 12.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 12.87Z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 8.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 8.87Z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M10.38 1.103a.75.75 0 0 0-.76 0l-7.25 4.25a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .76 0l7.25-4.25a.75.75 0 0 0 0-1.294l-7.25-4.25Z" />
+              </svg>
+
+              <span
+                class="menu-item-text"
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+                User Types
+              </span>
+
+              <svg
+                @class([
+                  'menu-item-arrow',
+                  'menu-item-arrow-active' => $moduleName === 'UserTypes',
+                  'menu-item-arrow-inactive' => $moduleName != 'UserTypes'
+                ])
+                :class="[(selected === 'UserTypes') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                  stroke=""
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+
+            <!-- Dropdown Menu Start -->
+            <div
+              @class([
+                'overflow-hidden',
+                'transform',
+                'translate',
+                // 'block' => $moduleName === 'Usertypes',
+                // 'hidden' => $moduleName != 'Usertypes'
+              ])
+              :class="(selected === 'UserTypes' || moduleName === 'UserTypes') ? 'block' :'hidden'"
+            >
+              <ul
+                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
+              >
+                <li>
+                  <a
+                    href="{{ route('admin.userTypes.index') }}"
+                    class="menu-dropdown-item group"
+                    :class="page === 'admin.userTypes.index' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'UserTypes'"
+                  >
+                    User Type List
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="{{ route('admin.userTypes.create') }}"
+                    class="menu-dropdown-item group"
+                    :class="page === 'admin.userTypes.create' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'UserTypes'"
+                  >
+                    Add New User Type
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- Dropdown Menu End -->
+          </li>
+          <!-- Menu Item UserTypes -->
 
           <!-- Menu Item Calendar -->
           <!-- <li>

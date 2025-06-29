@@ -18,7 +18,6 @@ class ModuleController extends Controller
     {
         try {
             $modules = Module::orderByDesc('id')->paginate(25);
-            // dd($campaigns->toArray());
             return view('modules.index', ['dataItems' => $modules]);
         } catch (Exception $e) {
             $logid = time();
@@ -48,7 +47,7 @@ class ModuleController extends Controller
         } catch (Exception $e) {
             $logid = time();
             Log::error("LogId: $logid - Create Module - " . $e->getMessage());
-            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."]);
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."])->withInput();
         }
     }
 

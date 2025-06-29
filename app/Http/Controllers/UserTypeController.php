@@ -6,6 +6,9 @@ use App\Http\Requests\StoreUserTypeRequest;
 use App\Http\Requests\UpdateUserTypeRequest;
 use App\Models\UserType;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
+
 class UserTypeController extends Controller
 {
     /**
@@ -13,7 +16,14 @@ class UserTypeController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $usertypes = UserType::orderByDesc('id')->paginate(25);
+            return view('usertypes.index', ['dataItems' => $usertypes]);
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - List User Types - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while rendering the page. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -21,7 +31,7 @@ class UserTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('usertypes.create');
     }
 
     /**
@@ -29,7 +39,16 @@ class UserTypeController extends Controller
      */
     public function store(StoreUserTypeRequest $request)
     {
-        //
+        try {
+            $usertype_data = $request->validated();
+            $usertype_data['created_by'] = $request->user()->id;
+            UserType::create($usertype_data);
+            return redirect()->route('admin.userTypes.index')->withSuccess('User Type Added Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Create User Type - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."])->withInput();
+        }
     }
 
     /**
@@ -37,7 +56,7 @@ class UserTypeController extends Controller
      */
     public function show(UserType $userType)
     {
-        //
+        return redirect()->route('admin.userTypes.index');
     }
 
     /**
@@ -45,7 +64,7 @@ class UserTypeController extends Controller
      */
     public function edit(UserType $userType)
     {
-        //
+        return view('usertypes.edit', ['item' => $userType]);
     }
 
     /**
@@ -53,7 +72,16 @@ class UserTypeController extends Controller
      */
     public function update(UpdateUserTypeRequest $request, UserType $userType)
     {
-        //
+        try {
+            $usertype_data = $request->validated();
+            $userType->fill($usertype_data);
+            $userType->save();
+            return redirect()->route('admin.userTypes.index')->withSuccess('User Type Updated Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Update User Type - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -61,6 +89,14 @@ class UserTypeController extends Controller
      */
     public function destroy(UserType $userType)
     {
-        //
+        try {
+            $userTypeName = $userType->type;
+            $userType->delete();
+            return back()->withSuccess("User Type \"$userTypeName\" deleted successfully.");
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Delete User Type - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while deleting the User Type. Error Log ID: $logid."]);
+        }
     }
 }

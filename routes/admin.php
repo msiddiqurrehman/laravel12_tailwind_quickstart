@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\UserTypeController;
 
 Route::middleware('guest')->group(function () {
     Route::get('connect/administrator/login', [AuthenticatedSessionController::class, 'create'])
@@ -19,5 +20,9 @@ Route::middleware(['auth', 'verified', 'admin_auth'])->prefix('admin')->name('ad
 
     Route::resource('modules', ModuleController::class)->missing(function (Request $request) {
         return Redirect::route('admin.modules.index')->withErrors(["errors" => "Unable to find requested record."]);
+    });
+
+    Route::resource('userTypes', UserTypeController::class)->missing(function (Request $request) {
+        return Redirect::route('admin.userTypes.index')->withErrors(["errors" => "Unable to find requested record."]);
     });
 });

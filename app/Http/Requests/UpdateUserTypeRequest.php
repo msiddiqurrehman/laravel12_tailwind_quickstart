@@ -11,7 +11,7 @@ class UpdateUserTypeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateUserTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => ['required', 'integer', 'digits:1', 'in:0,1'],
+            'type' => ['required', 'string'],
         ];
     }
 }
