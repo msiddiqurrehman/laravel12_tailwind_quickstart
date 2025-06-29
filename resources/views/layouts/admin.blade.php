@@ -5,7 +5,7 @@
     </head>
     <body class="font-sans antialiased"
           x-data="{ 
-                    page: 'ecommerce', 
+                    page: '{{ request()->route()->getName() }}', 
                     'loaded': true, 
                     'darkMode': false, 
                     'stickyMenu': false, 

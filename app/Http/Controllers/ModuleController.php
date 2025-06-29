@@ -65,7 +65,7 @@ class ModuleController extends Controller
      */
     public function edit(Module $module)
     {
-        dd('modules edit');
+        return view('modules.edit', ['item' => $module]);
     }
 
     /**
@@ -73,7 +73,16 @@ class ModuleController extends Controller
      */
     public function update(UpdateModuleRequest $request, Module $module)
     {
-        dd('modules update');
+        try{
+            $module_data = $request->validated();
+            $module->fill($module_data);
+            $module->save();
+            return redirect()->route('admin.modules.index')->withSuccess('Module Updated Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Update Module - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."]);
+        }
     }
 
     /**
