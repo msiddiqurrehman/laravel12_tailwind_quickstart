@@ -96,7 +96,7 @@ class UserTypeController extends Controller
         } catch (Exception $e) {
             $logid = time();
             Log::error("LogId: $logid - Delete User Type - " . $e->getMessage());
-            return back()->withErrors(["errors" => "An error occurred while deleting the User Type. Error Log ID: $logid."]);
+            return back()->withErrors(["errors" => "An error occurred while deleting the user type. Error Log ID: $logid."]);
         }
     }
 }

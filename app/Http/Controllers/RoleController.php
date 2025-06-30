@@ -6,6 +6,9 @@ use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Role;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
+
 class RoleController extends Controller
 {
     /**
@@ -13,7 +16,14 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $roles = Role::orderByDesc('id')->paginate(25);
+            return view('roles.index', ['dataItems' => $roles]);
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - List Roles - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while rendering the page. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -21,7 +31,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('roles.create');
     }
 
     /**
@@ -29,7 +39,16 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        //
+        try {
+            $role_data = $request->validated();
+            $role_data['created_by'] = $request->user()->id;
+            Role::create($role_data);
+            return redirect()->route('admin.roles.index')->withSuccess('Role Added Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Create Role - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."])->withInput();
+        }
     }
 
     /**
@@ -37,7 +56,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        return redirect()->route('admin.roles.index');
     }
 
     /**
@@ -45,7 +64,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        return view('roles.edit', ['item' => $role]);
     }
 
     /**
@@ -53,7 +72,16 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        //
+        try {
+            $role_data = $request->validated();
+            $role->fill($role_data);
+            $role->save();
+            return redirect()->route('admin.roles.index')->withSuccess('Role Updated Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Update Role - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -61,6 +89,14 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        try {
+            $roleName = $role->title;
+            $role->delete();
+            return back()->withSuccess("Role \"$roleName\" deleted successfully.");
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Delete Role - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while deleting the role. Error Log ID: $logid."]);
+        }
     }
 }

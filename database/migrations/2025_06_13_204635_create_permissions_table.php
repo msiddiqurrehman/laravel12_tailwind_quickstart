@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('can_delete')->index();
             $table->boolean('can_edit')->index();
             $table->boolean('can_view')->index();
+            $table->foreignId('created_by')->nullable()->comment('foreign key to users.id')->constrained('users')->onUpdate('cascade')->nullOnDelete();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

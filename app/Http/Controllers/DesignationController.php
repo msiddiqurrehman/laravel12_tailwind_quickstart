@@ -21,7 +21,7 @@ class DesignationController extends Controller
             return view('designations.index', ['dataItems' => $designations]);
         } catch (Exception $e) {
             $logid = time();
-            Log::error("LogId: $logid - List Modules - " . $e->getMessage());
+            Log::error("LogId: $logid - List Designations - " . $e->getMessage());
             return back()->withErrors(["errors" => "An error occurred while rendering the page. Error Log ID: $logid."]);
         }
     }
@@ -96,7 +96,7 @@ class DesignationController extends Controller
         } catch (Exception $e) {
             $logid = time();
             Log::error("LogId: $logid - Delete Designation - " . $e->getMessage());
-            return back()->withErrors(["errors" => "An error occurred while deleting the module. Error Log ID: $logid."]);
+            return back()->withErrors(["errors" => "An error occurred while deleting the designation. Error Log ID: $logid."]);
         }
     }
 }

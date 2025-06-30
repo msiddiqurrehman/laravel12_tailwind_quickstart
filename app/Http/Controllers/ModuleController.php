@@ -42,7 +42,16 @@ class ModuleController extends Controller
         try{
             $module_data = $request->validated();
             $module_data['created_by'] = $request->user()->id;
-            Module::create($module_data);
+            $newModule = Module::create($module_data);
+
+            $user_id = $request->user()->id;
+            $newModulePermissions = [
+                ['role_id' => 1, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => $user_id],
+                ['role_id' => 2, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => $user_id],
+            ];
+
+            $newModule->permissions()->createMany($newModulePermissions);
+
             return redirect()->route('admin.modules.index')->withSuccess('Module Added Successfully!');
         } catch (Exception $e) {
             $logid = time();

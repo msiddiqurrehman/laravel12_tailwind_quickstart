@@ -235,13 +235,11 @@
                 :class="(selected === 'UserTypes') || (page === 'admin.userTypes.index' || page === 'admin.userTypes.create') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
                 width="24"
                 height="24"
-                viewBox="0 0 24 24"
+                viewBox="0 0 32 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 12.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 12.87Z" />
-                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 8.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 8.87Z" />
-                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M10.38 1.103a.75.75 0 0 0-.76 0l-7.25 4.25a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .76 0l7.25-4.25a.75.75 0 0 0 0-1.294l-7.25-4.25Z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M19.307 3.21a2.91 2.91 0 1 0-.223 1.94a11.636 11.636 0 0 1 8.232 7.049l1.775-.698a13.576 13.576 0 0 0-9.784-8.291m-2.822 1.638a.97.97 0 1 1 0-1.939a.97.97 0 0 1 0 1.94m-4.267.805l-.717-1.774a13.576 13.576 0 0 0-8.291 9.784a2.91 2.91 0 1 0 1.94.223a11.636 11.636 0 0 1 7.068-8.233m-8.34 11.802a.97.97 0 1 1 0-1.94a.97.97 0 0 1 0 1.94m12.607 8.727a2.91 2.91 0 0 0-2.599 1.62a11.636 11.636 0 0 1-8.233-7.05l-1.774.717a13.576 13.576 0 0 0 9.813 8.291a2.91 2.91 0 1 0 2.793-3.578m0 3.879a.97.97 0 1 1 0-1.94a.97.97 0 0 1 0 1.94M32 16.485a2.91 2.91 0 1 0-4.199 2.599a11.636 11.636 0 0 1-7.05 8.232l.718 1.775a13.576 13.576 0 0 0 8.291-9.813A2.91 2.91 0 0 0 32 16.485m-2.91.97a.97.97 0 1 1 0-1.94a.97.97 0 0 1 0 1.94"/><path fill="currentColor" d="M19.19 16.35a3.879 3.879 0 1 0-5.42 0a4.848 4.848 0 0 0-2.134 4.014v1.939h9.697v-1.94a4.848 4.848 0 0 0-2.143-4.014m-4.645-2.774a1.94 1.94 0 1 1 3.88 0a1.94 1.94 0 0 1-3.88 0m-.97 6.788a2.91 2.91 0 1 1 5.819 0z"/>
               </svg>
 
               <span
@@ -315,7 +313,7 @@
           </li>
           <!-- Menu Item UserTypes -->
 
-          <!-- Menu Item UserTypes -->
+          <!-- Menu Item Designations -->
           <li>
             <a
               href="#"
@@ -336,13 +334,13 @@
                 :class="(selected === 'Designations') || (page === 'admin.designations.index' || page === 'admin.designations.create') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
                 width="24"
                 height="24"
-                viewBox="0 0 24 24"
+                viewBox="0 0 512.162 512.162"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 12.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 12.87Z" />
-                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 8.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 8.87Z" />
-                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M10.38 1.103a.75.75 0 0 0-.76 0l-7.25 4.25a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .76 0l7.25-4.25a.75.75 0 0 0 0-1.294l-7.25-4.25Z" />
+              <path d="M490.714,315.112v-44.2l17.6-45.4c10.3-24-0.8-51.9-24.7-62.3l-182-79.3c-28.9-12.1-62.1-12.1-91.3,0.1l-181.5,79 c-24,10.5-35.2,38.6-25.1,62.1l17.7,45.6v43.1c-12.5,6.3-21.3,18.9-21.3,33v11.2c0,20.9,15.7,40.2,37.2,45.9 c87.1,22.8,156.6,33.4,218.7,33.4c77.2,0,147.1-17.1,214.7-33.7c20.1-4.9,41.4-22.8,41.4-46.1v-9.1 C512.114,333.612,502.714,321.712,490.714,315.112z M261.214,139.412c9.4,1.9,16.7,9.7,18.7,19.1c1.9,9.4-2,15.5-7.6,20.8 l5.1,10.2c6.4,12.9,2.7,28.5-8.8,37.1l-12.5,9.4l-11.6-8.7c-12-9-15.9-25.3-9.2-38.7l4.6-9.2c-4.6-4.4-8.1-9.3-8.1-16.2 C231.814,148.112,245.614,136.212,261.214,139.412z M448.014,309.312h-383.9v-21.3h383.9V309.312z"/>
+                {{-- <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 8.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 8.87Z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M10.38 1.103a.75.75 0 0 0-.76 0l-7.25 4.25a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .76 0l7.25-4.25a.75.75 0 0 0 0-1.294l-7.25-4.25Z" /> --}}
               </svg>
 
               <span
@@ -414,7 +412,108 @@
             </div>
             <!-- Dropdown Menu End -->
           </li>
-          <!-- Menu Item UserTypes -->
+          <!-- Menu Item Designations -->
+
+          <!-- Menu Item Roles -->
+          <li>
+            <a
+              href="#"
+              @click.prevent="selected = (selected === 'Roles' ? '':'Roles')"
+              @class([
+                      'menu-item', 
+                      'group',
+                      'menu-item-active' => $moduleName === 'Roles',
+                      'menu-item-inactive' => $moduleName != 'Roles'
+                    ])
+              :class=" (selected === 'Roles') || (page === 'admin.roles.index' || page === 'admin.roles.create') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+              <svg
+                @class([
+                  'menu-item-icon-active' => $moduleName === 'Roles',
+                  'menu-item-icon-inactive' => $moduleName != 'Roles'
+                ])
+                :class="(selected === 'Roles') || (page === 'admin.roles.index' || page === 'admin.roles.create') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                width="24"
+                height="24"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M28.07 21L22 15l6.07-6l1.43 1.41L24.86 15l4.64 4.59L28.07 21zM22 30h-2v-5a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v5H2v-5a7 7 0 0 1 7-7h6a7 7 0 0 1 7 7zM12 4a5 5 0 1 1-5 5a5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7a7 7 0 0 0-7-7z"/>
+                {{-- <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 8.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 8.87Z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M10.38 1.103a.75.75 0 0 0-.76 0l-7.25 4.25a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .76 0l7.25-4.25a.75.75 0 0 0 0-1.294l-7.25-4.25Z" /> --}}
+              </svg>
+
+              <span
+                class="menu-item-text"
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+                Roles
+              </span>
+
+              <svg
+                @class([
+                  'menu-item-arrow',
+                  'menu-item-arrow-active' => $moduleName === 'Roles',
+                  'menu-item-arrow-inactive' => $moduleName != 'Roles'
+                ])
+                :class="[(selected === 'Roles') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                  stroke=""
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+
+            <!-- Dropdown Menu Start -->
+            <div
+              @class([
+                'overflow-hidden',
+                'transform',
+                'translate',
+                // 'block' => $moduleName === 'Roles',
+                // 'hidden' => $moduleName != 'Roles'
+              ])
+              :class="(selected === 'Roles' || moduleName === 'Roles') ? 'block' :'hidden'"
+            >
+              <ul
+                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
+              >
+                <li>
+                  <a
+                    href="{{ route('admin.roles.index') }}"
+                    class="menu-dropdown-item group"
+                    :class="page === 'admin.roles.index' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'Roles'"
+                  >
+                    Role List
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="{{ route('admin.roles.create') }}"
+                    class="menu-dropdown-item group"
+                    :class="page === 'admin.roles.create' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'Roles'"
+                  >
+                    Add New Role
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- Dropdown Menu End -->
+          </li>
+          <!-- Menu Item Roles -->
 
           <!-- Menu Item Calendar -->
           <!-- <li>
