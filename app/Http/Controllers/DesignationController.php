@@ -6,6 +6,9 @@ use App\Http\Requests\StoreDesignationRequest;
 use App\Http\Requests\UpdateDesignationRequest;
 use App\Models\Designation;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
+
 class DesignationController extends Controller
 {
     /**
@@ -13,7 +16,14 @@ class DesignationController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $designations = Designation::orderByDesc('id')->paginate(25);
+            return view('designations.index', ['dataItems' => $designations]);
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - List Modules - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while rendering the page. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -21,7 +31,7 @@ class DesignationController extends Controller
      */
     public function create()
     {
-        //
+        return view('designations.create');
     }
 
     /**
@@ -29,7 +39,16 @@ class DesignationController extends Controller
      */
     public function store(StoreDesignationRequest $request)
     {
-        //
+        try {
+            $designation_data = $request->validated();
+            $designation_data['created_by'] = $request->user()->id;
+            Designation::create($designation_data);
+            return redirect()->route('admin.designations.index')->withSuccess('Designation Added Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Create Designation - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."])->withInput();
+        }
     }
 
     /**
@@ -37,7 +56,7 @@ class DesignationController extends Controller
      */
     public function show(Designation $designation)
     {
-        //
+        return redirect()->route('admin.designations.index');
     }
 
     /**
@@ -45,7 +64,7 @@ class DesignationController extends Controller
      */
     public function edit(Designation $designation)
     {
-        //
+        return view('designations.edit', ['item' => $designation]);
     }
 
     /**
@@ -53,7 +72,16 @@ class DesignationController extends Controller
      */
     public function update(UpdateDesignationRequest $request, Designation $designation)
     {
-        //
+        try {
+            $designation_data = $request->validated();
+            $designation->fill($designation_data);
+            $designation->save();
+            return redirect()->route('admin.designations.index')->withSuccess('Designation Updated Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Update Designation - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -61,6 +89,14 @@ class DesignationController extends Controller
      */
     public function destroy(Designation $designation)
     {
-        //
+        try {
+            $designationName = $designation->title;
+            $designation->delete();
+            return back()->withSuccess("Designation \"$designationName\" deleted successfully.");
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Delete Designation - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while deleting the module. Error Log ID: $logid."]);
+        }
     }
 }

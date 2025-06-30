@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+use App\Models\Designation;
+use Illuminate\Validation\Rule;
+
 class UpdateDesignationRequest extends FormRequest
 {
     /**
@@ -11,7 +14,7 @@ class UpdateDesignationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +25,8 @@ class UpdateDesignationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => ['required', 'integer', 'digits:1', 'in:0,1'],
+            'title' => ['required', 'string', Rule::unique(Designation::class)->ignore($this->designation->id)],
         ];
     }
 }
