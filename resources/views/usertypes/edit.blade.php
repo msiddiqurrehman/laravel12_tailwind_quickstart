@@ -41,17 +41,17 @@
 
                         <!-- Elements -->
                         <div>
-                            <label for="type" class="mb-1.5 inline-block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                User Type
-                            </label>
-                            <input
+                            <x-input-label for="type" :value="__('User Type')"/>
+
+                            <x-text-input
                                 type="text"
                                 name="type"
                                 id="type"
                                 placeholder="User Type"
                                 value="{{ old('type', $item->type) }}"
-                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                             />
+                            
+                            <x-input-error class="mt-2" :messages="$errors->get('type')" />
                         </div>
 
                         <div class="flex items-center justify-start mt-4">
