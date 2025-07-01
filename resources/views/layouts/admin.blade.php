@@ -9,7 +9,7 @@
                     'loaded': true, 
                     'darkMode': false, 
                     'stickyMenu': false, 
-                    'sidebarToggle': false, 
+                    'sidebarToggle': true, 
                     'scrollTop': false, 
                     'showConfirmDeleteModal': false,
                     'confirmModalMsg':'',

@@ -27,6 +27,13 @@ class UpdateRoleRequest extends FormRequest
         return [
             'status' => ['required', 'integer', 'digits:1', 'in:0,1'],
             'title' => ['required', 'string', Rule::unique(Role::class)->ignore($this->role->id)],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*.id' => ['nullable', 'numeric', 'integer', 'exists:App\Models\Permission'],
+            'permissions.*.module_id' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'exists:App\Models\Module,id'],
+            'permissions.*.can_view' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'digits:1', 'in:0,1'],
+            'permissions.*.can_create' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'digits:1', 'in:0,1'],
+            'permissions.*.can_edit' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'digits:1', 'in:0,1'],
+            'permissions.*.can_delete' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'digits:1', 'in:0,1'],
         ];
     }
 }

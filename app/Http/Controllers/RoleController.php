@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Role;
-
+use App\Models\Module;
+use App\Models\Permission;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -31,7 +32,17 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('roles.create');
+        try{
+            $modules = Module::where('slug', '!=', 'modules')
+                                ->where('slug', '!=', 'user_types')
+                                ->orderBy('name')
+                                ->get();
+            return view('roles.create', ['modules' => $modules]);
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Create Role - " . $e->getMessage());
+            return back()->withErrors(["role_error" => "An error occurred while rendering create role page. Please check error log with Log ID: $logid."]);
+        }
     }
 
     /**
@@ -42,7 +53,26 @@ class RoleController extends Controller
         try {
             $role_data = $request->validated();
             $role_data['created_by'] = $request->user()->id;
-            Role::create($role_data);
+
+            if(!empty($role_data['permissions'])) {
+                $permissions = $role_data['permissions'];
+                $user_id = $request->user()->id;
+                foreach($permissions as $key => $permission) {
+                    $permissions[$key]['created_by'] = $user_id;
+                }
+                // dd($permissions);
+            }
+
+            $new_role = Role::create($role_data);
+
+            // $all_modules = Module::all();
+            // $new_role_permissions = [];
+            // foreach($all_modules as $module) {
+            //     $new_role_permissions[] = ['module_id' => $module->id, 'can_create' => 0, 'can_delete' => 0, 'can_edit' => 0, 'can_view' => 0, 'created_by' => $user_id];
+            // }
+            if (!empty($permissions))
+                $new_role->permissions()->createMany($permissions);
+
             return redirect()->route('admin.roles.index')->withSuccess('Role Added Successfully!');
         } catch (Exception $e) {
             $logid = time();
@@ -64,7 +94,25 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('roles.edit', ['item' => $role]);
+        try{
+            $any_permission_model = Permission::first();
+            $role_permissions = $role->permissions->keyBy('module_id')->toArray();
+            $modules = Module::where('slug', '!=', 'modules')
+                                ->where('slug', '!=', 'user_types')
+                                ->orderBy('name')
+                                ->get();
+            return view('roles.edit', [
+                                        'item' => $role,
+                                        'role_permissions' => $role_permissions,
+                                        'any_permission_model' => $any_permission_model,
+                                        'modules' => $modules
+                                    ]
+                        );
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Edit Role - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while rendering edit role page. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -74,8 +122,27 @@ class RoleController extends Controller
     {
         try {
             $role_data = $request->validated();
+
+            if (!empty($role_data['permissions'])) {
+                $permissions = $role_data['permissions'];
+                $user_id = $request->user()->id;
+                foreach ($permissions as $key => $permission) {
+                    if(empty($permission['id']))
+                        $permissions[$key]['created_by'] = $user_id;
+                }
+                // dd($permissions);
+            }
+
             $role->fill($role_data);
             $role->save();
+
+            if (!empty($permissions))
+                $role->permissions()->upsert(
+                                                $permissions,
+                                                ['id'], //Mysql ignores this argument and uses primary key (mostly 'id') element of array to detect existence of record
+                                                ['can_create', 'can_delete', 'can_edit', 'can_view']
+                                            );
+
             return redirect()->route('admin.roles.index')->withSuccess('Role Updated Successfully!');
         } catch (Exception $e) {
             $logid = time();

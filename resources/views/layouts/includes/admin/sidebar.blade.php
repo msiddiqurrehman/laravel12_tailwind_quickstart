@@ -2,7 +2,7 @@
   $routeName = request()->route()->getName();
   $routeNameArr = explode('.', $routeName);
   $moduleName = ucwords($routeNameArr[1]);
-  // echo $moduleName;
+  $moduleName = ($moduleName == 'Permissions')? 'Roles' : $moduleName;
 @endphp
 <aside
   :class="sidebarToggle ? 'translate-x-0 lg:w-[90px]' : '-translate-x-full'"
@@ -112,6 +112,7 @@
               </span>
             </a>
           </li>
+          <!-- Menu Item Dashboard -->
           
           <!-- Menu Item Modules -->
           <li>
@@ -414,7 +415,7 @@
           </li>
           <!-- Menu Item Designations -->
 
-          <!-- Menu Item Roles -->
+          <!-- Menu Item Roles & Permissions -->
           <li>
             <a
               href="#"
@@ -448,7 +449,7 @@
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
-                Roles
+                Roles & Permissions
               </span>
 
               <svg
@@ -509,11 +510,21 @@
                     Add New Role
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="{{ route('admin.permissions.index') }}"
+                    class="menu-dropdown-item group"
+                    :class="page === 'admin.permissions.index' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'Roles'"
+                  >
+                    Permission List
+                  </a>
+                </li>
               </ul>
             </div>
             <!-- Dropdown Menu End -->
           </li>
-          <!-- Menu Item Roles -->
+          <!-- Menu Item Roles & Permissions -->
 
           <!-- Menu Item Calendar -->
           <!-- <li>

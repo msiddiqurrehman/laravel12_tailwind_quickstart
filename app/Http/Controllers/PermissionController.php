@@ -6,6 +6,9 @@ use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use App\Models\Permission;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
+
 class PermissionController extends Controller
 {
     /**
@@ -13,7 +16,14 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $permissions = Permission::orderByDesc('role_id')->paginate(25);
+            return view('permissions.index', ['dataItems' => $permissions]);
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - List Permissions - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while rendering the page. Error Log ID: $logid."]);
+        }
     }
 
     /**

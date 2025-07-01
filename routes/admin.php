@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\UserTypeController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 
 Route::middleware('guest')->group(function () {
@@ -36,4 +37,6 @@ Route::middleware(['auth', 'verified', 'admin_auth'])->prefix('admin')->name('ad
     Route::resource('roles', RoleController::class)->missing(function (Request $request) {
         return Redirect::route('admin.roles.index')->withErrors(["errors" => "Unable to find requested record."]);
     });
+
+    Route::resource('permissions', PermissionController::class)->only(['index']);
 });
