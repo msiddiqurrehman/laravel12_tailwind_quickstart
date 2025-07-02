@@ -21,7 +21,7 @@ class Role extends Model
     ];
 
     /**
-     * Module status labels.
+     * Role status labels.
      *
      * @var list<string>
      */
@@ -31,7 +31,7 @@ class Role extends Model
     ];
 
     /**
-     * Get the status label of the module.
+     * Get the status label of the role.
      */
     public function getStatusLabel($statusCode): String
     {
@@ -39,7 +39,7 @@ class Role extends Model
     }
 
     /**
-     * Get the user who created the module.
+     * Get the user who created the role.
      */
     public function creator(): BelongsTo
     {
@@ -47,7 +47,7 @@ class Role extends Model
     }
 
     /**
-     * Get the permissions for the module.
+     * Get the permissions of the role.
      */
     public function permissions(): HasMany
     {

@@ -20,7 +20,7 @@ class UserType extends Model
     ];
 
     /**
-     * Module status labels.
+     * UserType status labels.
      *
      * @var list<string>
      */
@@ -30,7 +30,7 @@ class UserType extends Model
     ];
 
     /**
-     * Get the status label of the module.
+     * Get the status label of the UserType.
      */
     public function getStatusLabel($statusCode): String
     {

@@ -15,11 +15,11 @@ class UserTypeSeeder extends Seeder
     public function run(): void
     {
         DB::table('user_types')->insert([
-            ['type' => 'Administrator', 'created_by' => 1],
+            ['type' => 'Staff', 'created_by' => 1],
             ['type' => 'Partner', 'created_by' => 1],
             ['type' => 'Customer', 'created_by' => 1],
         ]);
 
-        DB::table('users')->whereIn('id', [1, 2])->update(['user_type_id' => 1]);
+        DB::table('users')->whereIn('id', [1, 2, 3])->update(['user_type_id' => 1]);
     }
 }

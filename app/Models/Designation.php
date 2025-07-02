@@ -20,7 +20,7 @@ class Designation extends Model
     ];
 
     /**
-     * Module status labels.
+     * Designation status labels.
      *
      * @var list<string>
      */
@@ -30,7 +30,7 @@ class Designation extends Model
     ];
 
     /**
-     * Get the status label of the module.
+     * Get the status label of the designation.
      */
     public function getStatusLabel($statusCode): String
     {

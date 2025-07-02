@@ -41,7 +41,7 @@ class RoleController extends Controller
         } catch (Exception $e) {
             $logid = time();
             Log::error("LogId: $logid - Create Role - " . $e->getMessage());
-            return back()->withErrors(["role_error" => "An error occurred while rendering create role page. Please check error log with Log ID: $logid."]);
+            return back()->withErrors(["errors" => "An error occurred while rendering create role page. ErrorLog ID: $logid."]);
         }
     }
 

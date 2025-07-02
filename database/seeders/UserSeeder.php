@@ -30,6 +30,13 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('htnt_superadmin'),
                 'created_by' => 1,
             ],
+            [
+                'first_name' => 'Administrator',
+                'last_name' => '',
+                'email' => 'htnt_administrator@mailinator.com',
+                'password' => Hash::make('htnt_administrator'),
+                'created_by' => 1,
+            ],
         ]);
     }
 }

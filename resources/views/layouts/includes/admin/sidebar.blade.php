@@ -314,6 +314,117 @@
           </li>
           <!-- Menu Item UserTypes -->
 
+          <!-- Menu Item Roles & Permissions -->
+          <li>
+            <a
+              href="#"
+              @click.prevent="selected = (selected === 'Roles' ? '':'Roles')"
+              @class([
+                      'menu-item', 
+                      'group',
+                      'menu-item-active' => $moduleName === 'Roles',
+                      'menu-item-inactive' => $moduleName != 'Roles'
+                    ])
+              :class=" (selected === 'Roles') || (page === 'admin.roles.index' || page === 'admin.roles.create') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+              <svg
+                @class([
+                  'menu-item-icon-active' => $moduleName === 'Roles',
+                  'menu-item-icon-inactive' => $moduleName != 'Roles'
+                ])
+                :class="(selected === 'Roles') || (page === 'admin.roles.index' || page === 'admin.roles.create') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                width="24"
+                height="24"
+                viewBox="0 0 128 128"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {{-- <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M28.07 21L22 15l6.07-6l1.43 1.41L24.86 15l4.64 4.59L28.07 21zM22 30h-2v-5a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v5H2v-5a7 7 0 0 1 7-7h6a7 7 0 0 1 7 7zM12 4a5 5 0 1 1-5 5a5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7a7 7 0 0 0-7-7z"/> --}}
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M92.4285,92.70214a9.558,9.558,0,0,0-5.151-6.93676C78.32095,81.29915,58.66671,74.703,58.66671,74.703V68.21353l.54712-.4129a18.77694,18.77694,0,0,0,7.12945-11.93294l.11012-.69162h.53333a7.2534,7.2534,0,0,0,6.71314-4.51443,7.8988,7.8988,0,0,0,.98752-3.82622,7.26756,7.26756,0,0,0-.51614-2.69076,3.753,3.753,0,0,0-1.45547-2.33981l-1.81335-1.101.45075-1.96817c3.27573-14.2796-7.78668-27.14161-22.6409-27.496-.36127-.00688-.71912-.01029-1.07354-.00344-.35442-.00685-.71225-.00344-1.07354.00344C31.711,11.594,20.6486,24.456,23.9243,38.73564l.45075,1.96817-1.81332,1.101a3.753,3.753,0,0,0-1.4555,2.33981,7.26754,7.26754,0,0,0-.51611,2.69076,7.89848,7.89848,0,0,0,.98752,3.82622,7.25339,7.25339,0,0,0,6.71311,4.51443h.53333l.11012.69162a18.77694,18.77694,0,0,0,7.12945,11.93294l.54712.4129V74.703S16.95657,81.29915,8,85.76538a9.55783,9.55783,0,0,0-5.151,6.93676c-1.53464,8.95659-1.80645,24.06542-1.80645,24.06542H94.235S93.96311,101.65873,92.4285,92.70214Z"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M121.37018,34.15191V27.59562a16.35974,16.35974,0,1,0-32.71949,0v6.57a6.06113,6.06113,0,0,0-5.58722,6.03394V61.1398A6.079,6.079,0,0,0,89.11805,67.16H120.9097a6.05661,6.05661,0,0,0,6.04774-6.0477V40.179A6.05471,6.05471,0,0,0,121.37018,34.15191ZM107.80409,51.05109l-.39861.31615v5.38109a2.25825,2.25825,0,0,1-1.16831,2.09607,2.545,2.545,0,0,1-2.48092-.055,2.40684,2.40684,0,0,1-1.14768-2.048V51.381l-.12374-.1031-.25428-.20616A4.28921,4.28921,0,0,1,101.021,45.89a4.36726,4.36726,0,0,1,4.79008-2.52908h.00688a4.44018,4.44018,0,0,1,3.608,4.26777A4.21607,4.21607,0,0,1,107.80409,51.05109Zm7.61458-16.89919H94.59533V27.59562a10.41167,10.41167,0,1,1,20.82334,0Z"/>
+              </svg>
+
+              <span
+                class="menu-item-text"
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+                Roles & Permissions
+              </span>
+
+              <svg
+                @class([
+                  'menu-item-arrow',
+                  'menu-item-arrow-active' => $moduleName === 'Roles',
+                  'menu-item-arrow-inactive' => $moduleName != 'Roles'
+                ])
+                :class="[(selected === 'Roles') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                  stroke=""
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+
+            <!-- Dropdown Menu Start -->
+            <div
+              @class([
+                'overflow-hidden',
+                'transform',
+                'translate',
+                // 'block' => $moduleName === 'Roles',
+                // 'hidden' => $moduleName != 'Roles'
+              ])
+              :class="(selected === 'Roles' || moduleName === 'Roles') ? 'block' :'hidden'"
+            >
+              <ul
+                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
+              >
+                <li>
+                  <a
+                    href="{{ route('admin.roles.index') }}"
+                    class="menu-dropdown-item group"
+                    :class="page === 'admin.roles.index' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'Roles'"
+                  >
+                    Role List
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="{{ route('admin.roles.create') }}"
+                    class="menu-dropdown-item group"
+                    :class="page === 'admin.roles.create' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'Roles'"
+                  >
+                    Add New Role
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="{{ route('admin.permissions.index') }}"
+                    class="menu-dropdown-item group"
+                    :class="page === 'admin.permissions.index' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'Roles'"
+                  >
+                    Permission List
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- Dropdown Menu End -->
+          </li>
+          <!-- Menu Item Roles & Permissions -->
+
           <!-- Menu Item Designations -->
           <li>
             <a
@@ -415,50 +526,54 @@
           </li>
           <!-- Menu Item Designations -->
 
-          <!-- Menu Item Roles & Permissions -->
+          <!-- Menu Item Users -->
           <li>
             <a
               href="#"
-              @click.prevent="selected = (selected === 'Roles' ? '':'Roles')"
+              @click.prevent="selected = (selected === 'Users' ? '':'Users')"
               @class([
                       'menu-item', 
                       'group',
-                      'menu-item-active' => $moduleName === 'Roles',
-                      'menu-item-inactive' => $moduleName != 'Roles'
+                      'menu-item-active' => $moduleName === 'Users',
+                      'menu-item-inactive' => $moduleName != 'Users'
                     ])
-              :class=" (selected === 'Roles') || (page === 'admin.roles.index' || page === 'admin.roles.create') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class=" (selected === 'Users') || (page === 'admin.users.index' || page === 'admin.users.create') ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
                 @class([
-                  'menu-item-icon-active' => $moduleName === 'Roles',
-                  'menu-item-icon-inactive' => $moduleName != 'Roles'
+                  'menu-item-icon-active' => $moduleName === 'Users',
+                  'menu-item-icon-inactive' => $moduleName != 'Users'
                 ])
-                :class="(selected === 'Roles') || (page === 'admin.roles.index' || page === 'admin.roles.create') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                :class="(selected === 'Users') || (page === 'admin.users.index' || page === 'admin.users.create') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
                 width="24"
                 height="24"
-                viewBox="0 0 32 32"
+                viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M28.07 21L22 15l6.07-6l1.43 1.41L24.86 15l4.64 4.59L28.07 21zM22 30h-2v-5a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v5H2v-5a7 7 0 0 1 7-7h6a7 7 0 0 1 7 7zM12 4a5 5 0 1 1-5 5a5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7a7 7 0 0 0-7-7z"/>
+              <path d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H6Zm7.25-2.095c.478-.86.75-1.85.75-2.905a5.973 5.973 0 0 0-.75-2.906 4 4 0 1 1 0 5.811ZM15.466 20c.34-.588.535-1.271.535-2v-1a5.978 5.978 0 0 0-1.528-4H18a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2h-4.535Z"/>
                 {{-- <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="m3.196 8.87-.825.483a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .758 0l7.25-4.25a.75.75 0 0 0 0-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 0 1-2.276 0L3.196 8.87Z" />
                 <path fill-rule="evenodd" clip-rule="evenodd" fill="" d="M10.38 1.103a.75.75 0 0 0-.76 0l-7.25 4.25a.75.75 0 0 0 0 1.294l7.25 4.25a.75.75 0 0 0 .76 0l7.25-4.25a.75.75 0 0 0 0-1.294l-7.25-4.25Z" /> --}}
               </svg>
+              {{-- <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H6Zm7.25-2.095c.478-.86.75-1.85.75-2.905a5.973 5.973 0 0 0-.75-2.906 4 4 0 1 1 0 5.811ZM15.466 20c.34-.588.535-1.271.535-2v-1a5.978 5.978 0 0 0-1.528-4H18a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2h-4.535Z" clip-rule="evenodd"/>
+              </svg> --}}
+              
 
               <span
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
-                Roles & Permissions
+                Users
               </span>
 
               <svg
                 @class([
                   'menu-item-arrow',
-                  'menu-item-arrow-active' => $moduleName === 'Roles',
-                  'menu-item-arrow-inactive' => $moduleName != 'Roles'
+                  'menu-item-arrow-active' => $moduleName === 'Designations',
+                  'menu-item-arrow-inactive' => $moduleName != 'Designations'
                 ])
-                :class="[(selected === 'Roles') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                :class="[(selected === 'Users') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -481,10 +596,8 @@
                 'overflow-hidden',
                 'transform',
                 'translate',
-                // 'block' => $moduleName === 'Roles',
-                // 'hidden' => $moduleName != 'Roles'
               ])
-              :class="(selected === 'Roles' || moduleName === 'Roles') ? 'block' :'hidden'"
+              :class="(selected === 'Users' || moduleName === 'Users') ? 'block' :'hidden'"
             >
               <ul
                 :class="sidebarToggle ? 'lg:hidden' : 'flex'"
@@ -492,39 +605,29 @@
               >
                 <li>
                   <a
-                    href="{{ route('admin.roles.index') }}"
+                    href="{{ route('admin.users.index') }}"
                     class="menu-dropdown-item group"
-                    :class="page === 'admin.roles.index' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                    @click="selected = 'Roles'"
+                    :class="page === 'admin.users.index' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'Users'"
                   >
-                    Role List
+                    User List
                   </a>
                 </li>
                 <li>
                   <a
-                    href="{{ route('admin.roles.create') }}"
+                    href="{{ route('admin.users.create') }}"
                     class="menu-dropdown-item group"
-                    :class="page === 'admin.roles.create' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                    @click="selected = 'Roles'"
+                    :class="page === 'admin.users.create' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    @click="selected = 'Users'"
                   >
-                    Add New Role
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="{{ route('admin.permissions.index') }}"
-                    class="menu-dropdown-item group"
-                    :class="page === 'admin.permissions.index' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                    @click="selected = 'Roles'"
-                  >
-                    Permission List
+                    Add New User
                   </a>
                 </li>
               </ul>
             </div>
             <!-- Dropdown Menu End -->
           </li>
-          <!-- Menu Item Roles & Permissions -->
+          <!-- Menu Item Users -->
 
           <!-- Menu Item Calendar -->
           <!-- <li>

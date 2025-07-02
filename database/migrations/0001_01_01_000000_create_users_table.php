@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('contact_no', length: 16)->nullable()->index();
             $table->string('sec_contact_no', length: 16)->nullable()->index();
+            $table->string('image_path', length: 512)->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->tinyInteger('status')->default(1)->index()->comment('0 -> Inactive, 1 -> Active');

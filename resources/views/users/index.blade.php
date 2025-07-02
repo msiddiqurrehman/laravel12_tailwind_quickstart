@@ -1,7 +1,7 @@
 <x-admin-layout>
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
         <!-- Breadcrumb Start -->
-        <div x-data="{ pageName: `Permission List`, pages: [
+        <div x-data="{ pageName: `User List`, pages: [
                                                         {name: `Dashboard`, url: `{{route('admin.dashboard')}}` }, 
                                                     ]
                     }">
@@ -13,13 +13,13 @@
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="flex justify-between px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-theme-xl font-medium text-gray-800 dark:text-white/90">
-                        Permissions
+                        Users
                     </h3>
-                    <a href="{{ route('admin.roles.create') }}" class="text-theme-lg font-medium text-gray-500 dark:text-white/90">
+                    <a href="{{ route('admin.users.create') }}" class="text-theme-lg font-medium text-gray-500 dark:text-white/90">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 inline -mt-0.5">
                             <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
                         </svg>
-                        Add New Role
+                        Add New
                     </a>
                 </div>
                 <div class="p-5 border-t border-gray-100 dark:border-gray-800 sm:p-6">
@@ -40,42 +40,42 @@
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                    Role
+                                                    User
                                                 </p>
                                             </div>
                                         </th>
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                    Module
+                                                    Type
                                                 </p>
                                             </div>
                                         </th>
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                    Can View
+                                                    Designation
                                                 </p>
                                             </div>
                                         </th>
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                    Can Create
+                                                    Contact
                                                 </p>
                                             </div>
                                         </th>
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                    Can Edit
+                                                    Sec. Contact
                                                 </p>
                                             </div>
                                         </th>
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                    Can Delete
+                                                    Status
                                                 </p>
                                             </div>
                                         </th>
@@ -100,6 +100,13 @@
                                                 </p>
                                             </div>
                                         </th>
+                                        <th class="px-5 py-3 sm:px-6">
+                                            <div class="flex items-center">
+                                                <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                    Action
+                                                </p>
+                                            </div>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <!-- table header end -->
@@ -116,63 +123,64 @@
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
+                                            <div class="flex items-center">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-10 h-10 overflow-hidden rounded-full">
+                                                        @if($item->image_path !== null)
+                                                            <img src="{{ asset($item->image_path) }}" alt="{{ $item->first_name.' image' }}" />
+                                                        @else
+                                                            <img src="{{ asset('images/tailadmin/user/user-19.jpg') }}" alt="{{ $item->first_name. ' image' }}" />
+                                                        @endif
+                                                    </div>
+
+                                                    <div>
+                                                        <span
+                                                            class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                                            {{ $item->first_name.' '.$item->last_name }}
+                                                        </span>
+                                                        @if($item->id != 1 && $item->id != 2)
+                                                        <span
+                                                            class="block text-gray-500 text-theme-xs dark:text-gray-400">
+                                                            {{ $item->email }}
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->role->title }}
+                                                {{ $item->userType->type }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->module->name }}
+                                                @if($item->user_type_id == 1 && $item->id != 1 && $item->id != 2)
+                                                    {{ $item->designation->title }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </span>
+                                        </td>
+                                        <td class="px-5 py-4 sm:px-6">
+                                            <span class="text-gray-600 dark:text-gray-400">
+                                                {{ $item->contact }}
+                                            </span>
+                                        </td>
+                                        <td class="px-5 py-4 sm:px-6">
+                                            <span class="text-gray-600 dark:text-gray-400">
+                                                {{ $item->sec_contact }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <div class="flex items-center">
-                                                @if ($item->can_view)
+                                                @if ($item->status)
                                                     <p class="rounded-full bg-success-50 px-2 py-0.5 font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
-                                                        yes
+                                                        {{ $item->getStatusLabel($item->status) }}
                                                     </p>
                                                 @else
                                                     <p class="rounded-full bg-warning-50 px-2 py-0.5 font-medium text-warning-700 dark:bg-warning-500/15 dark:text-warning-400">
-                                                        No
-                                                    </p>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-4 sm:px-6">
-                                            <div class="flex items-center">
-                                                @if ($item->can_create)
-                                                    <p class="rounded-full bg-success-50 px-2 py-0.5 font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
-                                                        yes
-                                                    </p>
-                                                @else
-                                                    <p class="rounded-full bg-warning-50 px-2 py-0.5 font-medium text-warning-700 dark:bg-warning-500/15 dark:text-warning-400">
-                                                        No
-                                                    </p>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-4 sm:px-6">
-                                            <div class="flex items-center">
-                                                @if ($item->can_edit)
-                                                    <p class="rounded-full bg-success-50 px-2 py-0.5 font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
-                                                        yes
-                                                    </p>
-                                                @else
-                                                    <p class="rounded-full bg-warning-50 px-2 py-0.5 font-medium text-warning-700 dark:bg-warning-500/15 dark:text-warning-400">
-                                                        No
-                                                    </p>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-4 sm:px-6">
-                                            <div class="flex items-center">
-                                                @if ($item->can_delete)
-                                                    <p class="rounded-full bg-success-50 px-2 py-0.5 font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
-                                                        yes
-                                                    </p>
-                                                @else
-                                                    <p class="rounded-full bg-warning-50 px-2 py-0.5 font-medium text-warning-700 dark:bg-warning-500/15 dark:text-warning-400">
-                                                        No
+                                                        {{ $item->getStatusLabel($item->status) }}
                                                     </p>
                                                 @endif
                                             </div>
@@ -204,13 +212,34 @@
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->created_at->format('d-m-Y H:i A') }}
+                                                {{ $item->created_at->format("d-m-Y H:i A") }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->updated_at->format('d-m-Y H:i A') }}
+                                                {{ $item->updated_at->format("d-m-Y H:i A") }}
                                             </span>
+                                        </td>
+                                        <td class="px-5 py-4 sm:px-6">
+                                            <div class="flex items-center">
+                                                <a href="{{ route('admin.users.edit', $item) }}" title="Edit" class="p-1 me-2.5 text-yellow-500">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                                        <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+                                                    </svg>                                              
+                                                </a>
+                                                <form action="{{ route('admin.users.destroy', $item) }}" method="post" id="{{ 'form-delete-'.$item->id }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <a href="javascript:void(0);" title="Delete"
+                                                        @click="showConfirmDeleteModal = true; formToDeleteId='{{ 'form-delete-'.$item->id }}'; confirmModalMsg='Are you sure to delete user <span class= \'font-medium \'>{{ $item->first_name.' '.$item->last_name }}</span>?'" 
+                                                        class="text-red-600"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                                            <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                                                        </svg>
+                                                    </a>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>    
                                     @endforeach

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'contact_no',
         'sec_contact_no',
         'password',
+        'image_path',
     ];
 
     /**
@@ -36,6 +37,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    /**
+     * User status labels.
+     *
+     * @var list<string>
+     */
+    private $statusLabels = [
+        0 => 'Inactive',
+        1 => 'Active',
     ];
 
     /**
@@ -52,7 +63,15 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if User is an administrator.
+     * Get the status label of the user.
+     */
+    public function getStatusLabel($statusCode): String
+    {
+        return $this->statusLabels[$statusCode];
+    }
+
+    /**
+     * Check if User is a staff member (or administrator).
      *
      * @return boolean
      */
@@ -95,5 +114,13 @@ class User extends Authenticatable
     public function designation(): BelongsTo
     {
         return $this->belongsTo(Designation::class);
+    }
+
+    /**
+     * Get the type of the user.
+     */
+    public function userType(): BelongsTo
+    {
+        return $this->belongsTo(UserType::class);
     }
 }
