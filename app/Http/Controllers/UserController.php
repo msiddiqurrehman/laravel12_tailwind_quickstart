@@ -33,8 +33,8 @@ class UserController extends Controller
     public function create()
     {
         try {
-            $designations = Designation::orderBy('name')->get();
-            $usertypes = UserType::orderBy('name')->get();
+            $designations = Designation::orderBy('title')->get();
+            $usertypes = UserType::orderBy('type')->get();
             return view('users.create', ['designations' => $designations, 'usertypes' => $usertypes]);
         } catch (Exception $e) {
             $logid = time();
@@ -48,7 +48,31 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        //
+        try {
+            $user_data = $request->validated();
+            $user_data['created_by'] = $request->user()->id;
+
+            $new_user = User::create($user_data);
+
+            if(!empty($user_data['user_image'])){
+                $extension = $request->user_image->extension();
+                $file_name = 'user_image_' . $new_user->id . '.' . $extension;
+                $storage_path = 'user_images/profile';
+
+                $request->user_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                $image_path = 'storage/user_images/profile/' . $file_name;
+                $new_user->image_path = $image_path;
+                $new_user->save();
+            }
+
+            return redirect()->route('admin.users.index')->withSuccess('User Added Successfully!');
+
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Create User - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."])->withInput();
+        }
     }
 
     /**

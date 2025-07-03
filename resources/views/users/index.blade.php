@@ -150,7 +150,7 @@
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->userType->type }}
+                                                {{ $item->userType->type ?? 'Not found' }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
@@ -189,7 +189,7 @@
                                             <div class="flex items-center">
                                                 <div class="flex items-center gap-3">
                                                     <div class="w-10 h-10 overflow-hidden rounded-full">
-                                                        <img src="{{ asset('images/tailadmin/user/user-10.jpg') }}" alt="{{ $item->creator->first_name }}" />
+                                                        <img src="{{ asset('images/tailadmin/user/user-10.jpg') }}" alt="{{ $item->creator->first_name ?? 'Not found'}}" />
                                                     </div>
 
                                                     <div>
