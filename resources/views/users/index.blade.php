@@ -164,12 +164,12 @@
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->contact }}
+                                                {{ $item->contact_no }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->sec_contact }}
+                                                {{ $item->sec_contact_no }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">

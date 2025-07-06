@@ -37,7 +37,9 @@ class StoreUserRequest extends FormRequest
             'sec_contact_no' => ['nullable', 'numeric', 'digits_between:10,16'],
             'user_type_id' => ['required', 'numeric', 'integer', 'exists:App\Models\UserType,id'],
             'designation_id' => ['nullable', 'required_if:user_type_id,1', 'numeric', 'integer', 'exists:App\Models\Designation,id'],
-            'user_image' => ['nullable', 'file', 'image', 'max:2048']
+            'user_image' => ['nullable', 'file', 'image', 'max:2048'],
+            'user_role_ids' => ['nullable', 'array'],
+            'user_role_ids.*' => ['nullable', 'required_with:user_role_ids', 'numeric', 'integer', 'exists:App\Models\Role,id']
         ];
     }
 

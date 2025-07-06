@@ -18,7 +18,10 @@ class RoleController extends Controller
     public function index()
     {
         try {
-            $roles = Role::orderByDesc('id')->paginate(25);
+            $roles = Role::where('id', '!=', '1')
+                            ->where('id', '!=', '2')
+                            ->orderBy('title')
+                            ->paginate(25);
             return view('roles.index', ['dataItems' => $roles]);
         } catch (Exception $e) {
             $logid = time();

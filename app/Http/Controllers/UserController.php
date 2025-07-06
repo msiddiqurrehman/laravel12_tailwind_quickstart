@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Designation;
+use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\User;
 use App\Models\UserType;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -18,7 +21,10 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = User::orderByDesc('id')->paginate(25);
+            $users = User::where('id', '!=', '1')
+                            ->where('id', '!=', '2')
+                            ->orderBy('first_name')
+                            ->paginate(25);
             return view('users.index', ['dataItems' => $users]);
         } catch (Exception $e) {
             $logid = time();
@@ -35,7 +41,11 @@ class UserController extends Controller
         try {
             $designations = Designation::orderBy('title')->get();
             $usertypes = UserType::orderBy('type')->get();
-            return view('users.create', ['designations' => $designations, 'usertypes' => $usertypes]);
+            $roles = Role::where('id', '!=', '1')
+                            ->where('id', '!=', '2')
+                            ->orderBy('title')
+                            ->get();
+            return view('users.create', ['designations' => $designations, 'usertypes' => $usertypes, 'roles' => $roles]);
         } catch (Exception $e) {
             $logid = time();
             Log::error("LogId: $logid - Create User - " . $e->getMessage());
@@ -50,13 +60,15 @@ class UserController extends Controller
     {
         try {
             $user_data = $request->validated();
+            // dd($user_data);
             $user_data['created_by'] = $request->user()->id;
 
             $new_user = User::create($user_data);
 
+            // Upload image if exists.
             if(!empty($user_data['user_image'])){
                 $extension = $request->user_image->extension();
-                $file_name = 'user_image_' . $new_user->id . '.' . $extension;
+                $file_name = 'user_image_' . $new_user->id . '_' . time() . '.' . $extension;
                 $storage_path = 'user_images/profile';
 
                 $request->user_image->storePubliclyAs($storage_path, $file_name, 'public');
@@ -64,6 +76,15 @@ class UserController extends Controller
                 $image_path = 'storage/user_images/profile/' . $file_name;
                 $new_user->image_path = $image_path;
                 $new_user->save();
+            }
+
+            // Attach role(s) if assigned.
+            if(!empty($user_data['user_role_ids'])) {
+                $role_ids = [];
+                foreach($user_data['user_role_ids'] as $role_id) {
+                    $role_ids[$role_id] = ['created_by' => $user_data['created_by']];
+                }
+                $new_user->roles()->attach($role_ids);
             }
 
             return redirect()->route('admin.users.index')->withSuccess('User Added Successfully!');
@@ -80,7 +101,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -88,7 +109,28 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        try {
+            $designations = Designation::orderBy('title')->get();
+            $usertypes = UserType::orderBy('type')->get();
+            $roles = Role::where('id', '!=', '1')
+                            ->where('id', '!=', '2')
+                            ->orderBy('title')
+                            ->get();
+            $assigned_role_ids = RoleUser::where('user_id', $user->id)
+                                        ->pluck('role_id')
+                                        ->toArray();
+            return view('users.edit', [
+                                        'item' => $user, 
+                                        'designations' => $designations, 
+                                        'usertypes' => $usertypes, 
+                                        'roles' => $roles,
+                                        'assigned_role_ids' => $assigned_role_ids
+                                    ]);
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Edit User - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while rendering edit user page. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -96,7 +138,59 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        try{
+            $user_data = $request->validated();
+            // dd($user_data);
+            // Remove password from user's data to avoid unnecessary password update.
+            if (empty($user_data['password'])) {
+                unset($user_data['password']);
+            }
+
+            if (!empty($user_data['user_image'])) {
+                // Delete Old Image
+                if (!empty($user->image_path)) {
+                    $file_path = ltrim($user->image_path, 'storage/');
+                    Storage::disk('public')->delete($file_path);
+                    $user_data['image_path'] = null;
+                }
+
+                // Save New Image
+                $extension = $request->user_image->extension();
+                $file_name = 'user_image_' . $user->id . '_' . time() . '.' . $extension;
+                $storage_path = 'user_images/profile';
+
+                $request->user_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                $image_path = 'storage/user_images/profile/' . $file_name;
+                $user_data['image_path'] = $image_path;
+            } else {
+                if (!empty($user_data['delete-user-image'])) {
+                    $file_path = ltrim($user->image_path, 'storage/');
+                    Storage::disk('public')->delete($file_path);
+                    $user_data['image_path'] = null;
+                }
+            }
+
+            $user->fill($user_data);
+            $user->save();
+
+            // Update user role(s).
+            $role_ids = [];
+            if (!empty($user_data['user_role_ids'])) {
+                $created_by = $request->user()->id;
+                foreach ($user_data['user_role_ids'] as $role_id) {
+                    $role_ids[$role_id] = ['created_by' => $created_by];
+                }
+            }
+
+            $user->roles()->sync($role_ids);
+
+            return redirect()->route('admin.users.index')->withSuccess('User Updated Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Update User - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."]);
+        }    
     }
 
     /**

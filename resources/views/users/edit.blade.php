@@ -1,9 +1,9 @@
 <x-admin-layout>
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
         <!-- Breadcrumb Start -->
-        <div x-data="{ pageName: `Edit Designation '{{ $item->title }}'`, pages: [
+        <div x-data="{ pageName: `Edit User '{{ $item->first_name . ' ' . $item->last_name }}'`, pages: [
                                                         {name: `Dashboard`, url: `{{route('admin.dashboard')}}` }, 
-                                                        {name: `Designation List`, url: `{{route('admin.designations.index')}}` }, 
+                                                        {name: `User List`, url: `{{route('admin.users.index')}}` }, 
                                                     ]
                     }">
             <x-breadcrumbs />
@@ -14,9 +14,9 @@
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="flex justify-between px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-theme-xl font-medium text-gray-800 dark:text-white/90">
-                        Edit Designation Details
+                        Edit User Details
                     </h3>
-                    <a href="{{ route('admin.designations.index') }}" class="text-theme-lg font-medium text-gray-500 dark:text-white/90">
+                    <a href="{{ route('admin.users.index') }}" class="text-theme-lg font-medium text-gray-500 dark:text-white/90">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 inline -mt-0.5">
                             <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
                         </svg>
@@ -26,7 +26,8 @@
                 <div class="p-5 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                     <form 
                         method="post" 
-                        action="{{ route('admin.designations.update', $item) }}" 
+                        action="{{ route('admin.users.update', $item) }}" 
+                        enctype="multipart/form-data"
                         class="space-y-6"
                     >
                         @csrf
@@ -41,24 +42,129 @@
 
                         <!-- Elements -->
                         <div>
-                            <x-input-label for="title" :value="__('Designation Title')"/>
+                            <x-input-label for="user_type_id" :value="__('User Type')" />
 
-                            <x-text-input
-                                type="text"
-                                name="title"
-                                id="title"
-                                placeholder="Designation Title"
-                                value="{{ old('title', $item->title) }}"
-                            />
-                            
-                            <x-input-error class="mt-2" :messages="$errors->get('title')" />
+                            <x-select-input id="user_type_id" name="user_type_id">
+
+                                <x-select-option value="" text="Select User Type"/>
+
+                                @foreach ($usertypes as $usertype)
+                                    <x-select-option 
+                                                    value="{{ $usertype->id }}" 
+                                                    text="{{ $usertype->type }}" 
+                                                    :is-selected="old('user_type_id', $item->user_type_id) == $usertype->id" 
+                                    />
+                                @endforeach
+
+                            </x-select-input>
+
+                            <x-input-error class="mt-2" :messages="$errors->get('user_type_id')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="email" :value="__('Email')" />
+
+                            <x-text-input type="email" name="email" id="email" placeholder="Email"
+                                value="{{ old('email', $item->email) }}" />
+
+                            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="password" :value="__('Password (Leave blank for no change)')" />
+
+                            <x-password-input name="password" id="password" placeholder="Password"
+                                value="{{ old('password', '') }}" />
+
+                            <x-input-error class="mt-2" :messages="$errors->get('password')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="first_name" :value="__('First Name')" />
+
+                            <x-text-input type="text" name="first_name" id="first_name" placeholder="First Name"
+                                value="{{ old('first_name', $item->first_name) }}" />
+
+                            <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="last_name" :value="__('Last Name')" />
+
+                            <x-text-input type="text" name="last_name" id="last_name" placeholder="Last Name"
+                                value="{{ old('last_name', $item->last_name) }}" />
+
+                            <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="designation_id" :value="__('Designation')" />
+
+                            <x-select-input id="designation_id" name="designation_id">
+
+                                <x-select-option value="" text="Select Designation" />
+
+                                @foreach ($designations as $designation)
+                                    <x-select-option 
+                                                    value="{{ $designation->id }}" 
+                                                    text="{{ $designation->title }}"
+                                                    :is-selected="old('designation_id', $item->designation_id) == $designation->id"
+                                    />
+                                @endforeach
+
+                            </x-select-input>
+
+                            <x-input-error class="mt-2" :messages="$errors->get('user_type_id')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="contact_no" :value="__('Contact No')" />
+
+                            <x-text-input id="contact_no" name="contact_no" type="text" class=""
+                                :value="old('contact_no', $item->contact_no)" pattern="[0-9]{10,16}"
+                                title="Contact no. format: - 9876543210 or 00919876543210" required
+                                autocomplete="contact_no" />
+
+                            <x-input-error class="mt-2" :messages="$errors->get('contact_no')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="sec_contact_no" :value="__('Secondary Contact No')" />
+
+                            <x-text-input id="sec_contact_no" name="sec_contact_no" type="text" class=""
+                                :value="old('sec_contact_no', $item->sec_contact_no)" pattern="[0-9]{10,16}"
+                                title="Contact no. format: - 9876543210 or 00919876543210"
+                                autocomplete="sec_contact_no" />
+
+                            <x-input-error class="mt-2" :messages="$errors->get('sec_contact_no')" />
+                        </div>
+
+                        <div>
+                            <x-image-upload name="user_image" label="{{ !empty($item->image_path) ? 'Change Image' : 'Upload Image' }}" oldImagePath="{{ !empty($item->image_path) ? asset($item->image_path) : '' }}">
+                                <div class="py-2 my-3">
+                                    <x-checkbox-input id="chk-delete-user-image" name="delete-user-image" label="Delete Image" value="1" isChecked="{{ old('delete-user-image') == 1 ? 'true' : 'false'}}" />
+                                </div>
+                            </x-image-upload>
+                        </div>
+
+                        <div>
+                            <x-input-label :value="__('Choose User Roles')" />
+
+                            <div class="flex flex-wrap items-center gap-8 mt-1">
+                                @foreach ($roles as $role)
+                                    @php
+                                        $isChecked = in_array($role->id, old('user_role_ids', $assigned_role_ids)) ? 'true' : 'false';
+                                    @endphp
+                                    <x-checkbox-input id="{{ 'chk-user-role_'.$role->id }}" name="user_role_ids[]" label="{{ $role->title }}" value="{{ $role->id }}" isChecked="{{ $isChecked }}" />
+                                @endforeach
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-start mt-4">
-                            <x-secondary-link-button href="{{ route('admin.designations.index') }}">
+                            <x-secondary-link-button href="{{ route('admin.users.index') }}">
                                 Cancel
                             </x-secondary-link-button>
-                
+
                             <x-primary-button class="ms-3">Save</x-primary-button>
                         </div>
                     </form>

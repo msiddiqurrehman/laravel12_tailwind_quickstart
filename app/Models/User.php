@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -125,5 +126,13 @@ class User extends Authenticatable
     public function userType(): BelongsTo
     {
         return $this->belongsTo(UserType::class);
+    }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
     }
 }
