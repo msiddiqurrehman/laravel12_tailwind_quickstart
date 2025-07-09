@@ -21,6 +21,8 @@ class ModuleSeeder extends Seeder
             ['name' => 'Roles', 'slug' => 'roles', 'created_by' => 1],
             ['name' => 'Permissions', 'slug' => 'permissions', 'created_by' => 1],
             ['name' => 'Designations', 'slug' => 'designations', 'created_by' => 1],
+            ['name' => 'Countries', 'slug' => 'countries', 'created_by' => 1],
+            ['name' => 'States', 'slug' => 'states', 'created_by' => 1],
         ]);
     }
 }
