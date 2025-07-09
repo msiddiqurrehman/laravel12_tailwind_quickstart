@@ -115,9 +115,14 @@
                                                 @php
                                                 $permission_id = isset($role_permissions[$module->id]) ? 
                                                                     $role_permissions[$module->id]["id"] : '';
+                                                $created_by = isset($role_permissions[$module->id]) ? 
+                                                                    $role_permissions[$module->id]["created_by"] : '';
                                                 @endphp
                                                 <input type="hidden" name="{{ 'permissions['.$module->id.'][id]' }}" 
                                                     value="{{ $permission_id }}"/>
+                                                
+                                                <input type="hidden" name="{{ 'permissions['.$module->id.'][created_by]' }}" 
+                                                    value="{{ $created_by }}"/>
                                             </td>
                                             <td class="px-5 py-4 sm:px-6">
                                                 @php

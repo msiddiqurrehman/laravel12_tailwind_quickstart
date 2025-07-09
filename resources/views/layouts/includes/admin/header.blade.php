@@ -613,7 +613,10 @@
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
           <span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
-            <img src="{{asset('images/tailadmin/user/owner.jpg')}}" alt="User" />
+            @php
+              $image_path = auth()->user()->image_path ?? 'images/user_default_image.png';
+            @endphp
+            <img src="{{asset($image_path)}}" alt="User Image Not Found" />
           </span>
 
           <span class="text-theme-sm mr-1 block font-medium">

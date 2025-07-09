@@ -30,6 +30,7 @@ class UpdateRoleRequest extends FormRequest
             'permissions' => ['nullable', 'array'],
             'permissions.*.id' => ['nullable', 'numeric', 'integer', 'exists:App\Models\Permission'],
             'permissions.*.module_id' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'exists:App\Models\Module,id'],
+            'permissions.*.created_by' => ['nullable', 'numeric', 'integer', 'exists:App\Models\User,id'],
             'permissions.*.can_view' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'digits:1', 'in:0,1'],
             'permissions.*.can_create' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'digits:1', 'in:0,1'],
             'permissions.*.can_edit' => ['nullable', 'required_with:permissions', 'numeric', 'integer', 'digits:1', 'in:0,1'],

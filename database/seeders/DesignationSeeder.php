@@ -22,6 +22,6 @@ class DesignationSeeder extends Seeder
             ['title' => 'Sales Manager', 'created_by' => 1],
         ]);
 
-        DB::table('users')->where('id', 3)->update(['designation_id' => 1]);
+        DB::table('emp_details')->insert(['user_id' => 3, 'designation_id' => 1]);
     }
 }

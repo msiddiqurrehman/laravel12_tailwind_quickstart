@@ -15,7 +15,7 @@
  >
     <!-- icons -->
     <div class="icons mt-10">
-        <label class="cursor-pointer flex mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-400" id="select-image">
+        <label class="cursor-pointer flex mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-400">
             <span>{{ $label }}</span>
             <svg class="ms-2 mr-2 hover:text-gray-700 border rounded-full p-1 h-7"
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -25,7 +25,7 @@
             </svg>
             <input type="file" name="{{ $name }}" hidden @if ($isMultiple) multiple @endif
                 @change="images = Array.from($event.target.files).map(file => ({url: URL.createObjectURL(file), name: file.name, preview: ['jpg', 'jpeg', 'png', 'gif'].includes(file.name.split('.').pop().toLowerCase()), size: file.size > 1024 ? file.size > 1048576 ? Math.round(file.size / 1048576) + 'mb' : Math.round(file.size / 1024) + 'kb' : file.size + 'b'}))"
-                x-ref="fileInput" />
+                {{ $attributes->merge([]) }} x-ref="fileInput" />
 
         </label>
     </div>
@@ -39,7 +39,7 @@
                     <button @click="images.splice(index, 1)"
                         class="w-6 h-6 absolute text-center flex items-center top-0 right-0 m-2 text-white text-lg bg-red-500 hover:text-red-700 hover:bg-gray-100 rounded-full p-1"><span
                             class="mx-auto">×</span></button>
-                    <div x-text="image.size" class="text-xs text-center p-2"></div>
+                    <div x-text="image.size" class="text-xs text-center p-2 dark:text-white/90"></div>
                 </div>
                 <div x-show="!image.preview" class="relative w-32 h-32 object-cover rounded">
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 fill-white stroke-indigo-500" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

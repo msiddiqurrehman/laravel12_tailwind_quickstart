@@ -8,7 +8,7 @@
                 id="{{ $id }}" 
                 name="{{ $name }}" 
                 value="{{ $value }}" 
-                class="sr-only" 
+                {{ $attributes->merge(['class'=>'sr-only']) }} 
                 @change="checkboxToggle = !checkboxToggle" 
                 {{ $isChecked == 'true'? 'checked' : '' }} />
             <div :class="checkboxToggle ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"

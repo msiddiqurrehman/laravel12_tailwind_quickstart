@@ -129,7 +129,7 @@
                                                         @if($item->image_path !== null)
                                                             <img src="{{ asset($item->image_path) }}" alt="{{ $item->first_name.' image' }}" />
                                                         @else
-                                                            <img src="{{ asset('images/tailadmin/user/user-19.jpg') }}" alt="{{ $item->first_name. ' image' }}" />
+                                                            <img src="{{ asset('images/user_default_image.png') }}" alt="{{ $item->first_name. ' image' }}" />
                                                         @endif
                                                     </div>
 
@@ -150,13 +150,13 @@
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->userType->type ?? 'Not found' }}
+                                                {{ $item->userType->type ?? 'N/A' }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                @if($item->user_type_id == 1 && $item->id != 1 && $item->id != 2)
-                                                    {{ $item->designation->title }}
+                                                @if($item->user_type_id == 1)
+                                                    {{ $item->empDetail && $item->empDetail->designation ? $item->empDetail->designation->title : 'N/A' }}
                                                 @else
                                                     N/A
                                                 @endif
@@ -164,12 +164,12 @@
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->contact_no }}
+                                                {{ $item->contact_no ?? 'N/A' }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <span class="text-gray-600 dark:text-gray-400">
-                                                {{ $item->sec_contact_no }}
+                                                {{ $item->sec_contact_no ?? 'N/A' }}
                                             </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
@@ -189,7 +189,10 @@
                                             <div class="flex items-center">
                                                 <div class="flex items-center gap-3">
                                                     <div class="w-10 h-10 overflow-hidden rounded-full">
-                                                        <img src="{{ asset('images/tailadmin/user/user-10.jpg') }}" alt="{{ $item->creator->first_name ?? 'Not found'}}" />
+                                                        @php
+                                                            $image_path = $item->creator && $item->creator->image_path ? $item->creator->image_path : 'images/user_default_image.png';
+                                                        @endphp
+                                                        <img src="{{ asset($image_path) }}" alt="{{ $item->creator->first_name ?? 'Not found'}}" />
                                                     </div>
 
                                                     <div>
@@ -203,7 +206,7 @@
 
                                                         @if($item->creator->id != 1 && $item->creator->id != 2)
                                                             <span class="block text-gray-500 text-theme-sm dark:text-gray-400">
-                                                                {{ $item->creator->designation->title }}
+                                                                {{ $item->creator && $item->creator->empDetail && $item->creator->empDetail && $item->creator->empDetail->designation ? $item->creator->empDetail->designation->title : 'Designation Not Found' }}
                                                             </span>
                                                         @endif
                                                     </div>
@@ -225,7 +228,7 @@
                                                 <a href="{{ route('admin.users.edit', $item) }}" title="Edit" class="p-1 me-2.5 text-yellow-500">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                                                         <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
-                                                    </svg>                                              
+                                                    </svg>
                                                 </a>
                                                 <form action="{{ route('admin.users.destroy', $item) }}" method="post" id="{{ 'form-delete-'.$item->id }}">
                                                     @csrf

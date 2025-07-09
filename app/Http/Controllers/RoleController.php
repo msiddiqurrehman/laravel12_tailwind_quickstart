@@ -38,6 +38,7 @@ class RoleController extends Controller
         try{
             $modules = Module::where('slug', '!=', 'modules')
                                 ->where('slug', '!=', 'user_types')
+                                ->where('status', 1)
                                 ->orderBy('name')
                                 ->get();
             return view('roles.create', ['modules' => $modules]);
@@ -102,6 +103,7 @@ class RoleController extends Controller
             $role_permissions = $role->permissions->keyBy('module_id')->toArray();
             $modules = Module::where('slug', '!=', 'modules')
                                 ->where('slug', '!=', 'user_types')
+                                ->where('status', 1)
                                 ->orderBy('name')
                                 ->get();
             return view('roles.edit', [
@@ -128,12 +130,15 @@ class RoleController extends Controller
 
             if (!empty($role_data['permissions'])) {
                 $permissions = $role_data['permissions'];
+                $submitted_permissions = $role_data['permissions'];
                 $user_id = $request->user()->id;
+                $role_id = $role->id;
                 foreach ($permissions as $key => $permission) {
-                    if(empty($permission['id']))
+                    // $permissions[$key]['role_id'] = $role_id;
+                    if(empty($permission['created_by']))
                         $permissions[$key]['created_by'] = $user_id;
                 }
-                // dd($permissions);
+                // dd($submitted_permissions, $permissions);
             }
 
             $role->fill($role_data);
@@ -142,7 +147,7 @@ class RoleController extends Controller
             if (!empty($permissions))
                 $role->permissions()->upsert(
                                                 $permissions,
-                                                ['id'], //Mysql ignores this argument and uses primary key (mostly 'id') element of array to detect existence of record
+                                                ['role_id', 'module_id'], //Mysql ignores this argument and uses primary key (mostly 'id') element of array to detect existence of record
                                                 ['can_create', 'can_delete', 'can_edit', 'can_view']
                                             );
 

@@ -17,10 +17,14 @@ return new class extends Migration
             $table->string('last_name', length: 128)->nullable()->index();
             $table->string('email')->unique()->index();
             $table->timestamp('email_verified_at')->nullable();
+            $table->enum('gender', ['female', 'male']);
             $table->string('contact_no', length: 16)->nullable()->index();
             $table->string('sec_contact_no', length: 16)->nullable()->index();
             $table->string('image_path', length: 512)->nullable();
             $table->string('password');
+            $table->string('address', length: 256)->nullable();
+            $table->string('city', length: 64)->nullable()->index();
+            $table->string('district', length: 64)->nullable()->index();
             $table->rememberToken();
             $table->tinyInteger('status')->default(1)->index()->comment('0 -> Inactive, 1 -> Active');
             $table->foreignId('created_by')->nullable()->comment('foreign key to users.id')->constrained('users')->onUpdate('cascade')->nullOnDelete();

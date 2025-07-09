@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -22,14 +23,20 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'user_type_id',
-        'designation_id',
         'first_name',
         'last_name',
+        'gender',
         'email',
         'contact_no',
         'sec_contact_no',
         'password',
         'image_path',
+        'address',
+        'city',
+        'district',
+        'state_id',
+        'country_id',
+        'status',
         'created_by'
     ];
 
@@ -105,19 +112,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the employee details associated with the user.
+     */
+    public function empDetail(): HasOne
+    {
+        return $this->hasOne(EmpDetail::class);
+    }
+
+    /**
      * Get the user who created this user.
      */
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
-    }
-
-    /**
-     * Get the designation of the user.
-     */
-    public function designation(): BelongsTo
-    {
-        return $this->belongsTo(Designation::class);
     }
 
     /**

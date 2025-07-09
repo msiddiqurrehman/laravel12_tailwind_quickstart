@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Country;
 use App\Models\Designation;
 use App\Models\Role;
 use App\Models\RoleUser;
+use App\Models\State;
 use App\Models\User;
 use App\Models\UserType;
 use Exception;
@@ -45,7 +47,16 @@ class UserController extends Controller
                             ->where('id', '!=', '2')
                             ->orderBy('title')
                             ->get();
-            return view('users.create', ['designations' => $designations, 'usertypes' => $usertypes, 'roles' => $roles]);
+            $states = State::orderBy('name')->get();
+            $countries = Country::orderBy('name')->get();
+            return view('users.create', [
+                                            'designations' => $designations, 
+                                            'usertypes' => $usertypes, 
+                                            'roles' => $roles, 
+                                            'states' => $states, 
+                                            'countries' => $countries
+                                        ]
+                        );
         } catch (Exception $e) {
             $logid = time();
             Log::error("LogId: $logid - Create User - " . $e->getMessage());
@@ -87,6 +98,40 @@ class UserController extends Controller
                 $new_user->roles()->attach($role_ids);
             }
 
+            // Store Employee Details if exists.
+            if ($user_data['user_type_id'] == 1 && !empty($user_data['emp_detail'])) {
+                $emp_detail = $user_data['emp_detail'];
+
+                // Upload identity document if exists.
+                if (!empty($user_data['emp_detail']['identity_document'])) {
+                    $identity_doc_image = $user_data['emp_detail']['identity_document'];
+                    $extension = $identity_doc_image->extension();
+                    $file_name = 'id_' . $new_user->id . '_' . time() . '.' . $extension;
+                    $storage_path = 'user_images/identity_document';
+
+                    $identity_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                    $identity_document_path = 'storage/user_images/identity_document/' . $file_name;
+                    $emp_detail['identity_document_path'] = $identity_document_path;
+                }
+
+                // Upload educational document if exists.
+                if (!empty($user_data['emp_detail']['education_document'])) {
+                    $education_doc_image = $user_data['emp_detail']['education_document'];
+                    $extension = $education_doc_image->extension();
+                    $file_name = 'edu_doc_' . $new_user->id . '_' . time() . '.' . $extension;
+                    $storage_path = 'user_images/education_document';
+
+                    $education_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                    $education_document_path = 'storage/user_images/education_document/' . $file_name;
+                    $emp_detail['education_document_path'] = $education_document_path;
+                }
+
+                // Save Staff (Employee) Details to database
+                $new_user->empDetail()->create($emp_detail);
+            }
+
             return redirect()->route('admin.users.index')->withSuccess('User Added Successfully!');
 
         } catch (Exception $e) {
@@ -119,12 +164,16 @@ class UserController extends Controller
             $assigned_role_ids = RoleUser::where('user_id', $user->id)
                                         ->pluck('role_id')
                                         ->toArray();
+            $states = State::orderBy('name')->get();
+            $countries = Country::orderBy('name')->get();
             return view('users.edit', [
                                         'item' => $user, 
                                         'designations' => $designations, 
                                         'usertypes' => $usertypes, 
                                         'roles' => $roles,
-                                        'assigned_role_ids' => $assigned_role_ids
+                                        'assigned_role_ids' => $assigned_role_ids,
+                                        'states' => $states,
+                                        'countries' => $countries
                                     ]);
         } catch (Exception $e) {
             $logid = time();
@@ -140,7 +189,7 @@ class UserController extends Controller
     {
         try{
             $user_data = $request->validated();
-            // dd($user_data);
+            // dd($request->all(), $user_data);
             // Remove password from user's data to avoid unnecessary password update.
             if (empty($user_data['password'])) {
                 unset($user_data['password']);
@@ -151,7 +200,6 @@ class UserController extends Controller
                 if (!empty($user->image_path)) {
                     $file_path = ltrim($user->image_path, 'storage/');
                     Storage::disk('public')->delete($file_path);
-                    $user_data['image_path'] = null;
                 }
 
                 // Save New Image
@@ -172,6 +220,7 @@ class UserController extends Controller
             }
 
             $user->fill($user_data);
+            // dd($user_data, $user);
             $user->save();
 
             // Update user role(s).
@@ -184,6 +233,78 @@ class UserController extends Controller
             }
 
             $user->roles()->sync($role_ids);
+
+            // Update Employee Details.
+            if ($user_data['user_type_id'] == 1 && !empty($user_data['emp_detail'])) {
+                $emp_detail = $user_data['emp_detail'];
+
+                // Update identity document.
+                if (!empty($emp_detail['identity_document'])) {
+
+                    // Delete Old Image
+                    $existing_id_doc_image = $user->empDetail != null ? $user->empDetail->identity_document_path : '';
+                    if (!empty($existing_id_doc_image)) {
+                        $file_path = ltrim($existing_id_doc_image, 'storage/');
+                        Storage::disk('public')->delete($file_path);
+                    }
+
+                    $identity_doc_image = $emp_detail['identity_document'];
+                    $extension = $identity_doc_image->extension();
+                    $file_name = 'id_' . $user->id . '_' . time() . '.' . $extension;
+                    $storage_path = 'user_images/identity_document';
+
+                    $identity_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                    $identity_document_path = 'storage/user_images/identity_document/' . $file_name;
+                    $emp_detail['identity_document_path'] = $identity_document_path;
+                } else {
+                    if (!empty($emp_detail['delete-id-doc'])) {
+                        $existing_id_doc_image = $user->empDetail != null ? $user->empDetail->identity_document_path : '';
+                        if (!empty($existing_id_doc_image)) {
+                            $file_path = ltrim($existing_id_doc_image, 'storage/');
+                            Storage::disk('public')->delete($file_path);
+                        }
+                        $emp_detail['identity_document_path'] = null;
+                    }
+                }
+
+                // Update educational document if exists.
+                if (!empty($emp_detail['education_document'])) {
+
+                    // Delete Old Image
+                    $existing_edu_doc_image = $user->empDetail != null ? $user->empDetail->education_document_path : '';
+                    if (!empty($existing_edu_doc_image)) {
+                        $file_path = ltrim($existing_edu_doc_image, 'storage/');
+                        Storage::disk('public')->delete($file_path);
+                    }
+
+                    $education_doc_image = $emp_detail['education_document'];
+                    $extension = $education_doc_image->extension();
+                    $file_name = 'edu_doc_' . $user->id . '_' . time() . '.' . $extension;
+                    $storage_path = 'user_images/education_document';
+
+                    $education_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                    $education_document_path = 'storage/user_images/education_document/' . $file_name;
+                    $emp_detail['education_document_path'] = $education_document_path;
+                } else {
+                    if (!empty($emp_detail['delete-edu-doc'])) {
+                        $existing_edu_doc_image = $user->empDetail != null ? $user->empDetail->education_document_path : '';
+                        if (!empty($existing_edu_doc_image)) {
+                            $file_path = ltrim($existing_edu_doc_image, 'storage/');
+                            Storage::disk('public')->delete($file_path);
+                        }
+                        $emp_detail['education_document_path'] = null;
+                    }
+                }
+
+                // Save Staff (Employee) Details to database
+                // $user->empDetail()->create($emp_detail);
+                $user->empDetail()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    $emp_detail
+                );
+            }
 
             return redirect()->route('admin.users.index')->withSuccess('User Updated Successfully!');
         } catch (Exception $e) {
