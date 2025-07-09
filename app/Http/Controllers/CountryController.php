@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCountryRequest;
 use App\Http\Requests\UpdateCountryRequest;
 use App\Models\Country;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class CountryController extends Controller
 {
@@ -13,7 +15,14 @@ class CountryController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $countries = Country::orderBy('name')->paginate(25);
+            return view('countries.index', ['dataItems' => $countries]);
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - List Countries - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while rendering the page. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -21,7 +30,7 @@ class CountryController extends Controller
      */
     public function create()
     {
-        //
+        return view('countries.create');
     }
 
     /**
@@ -29,7 +38,16 @@ class CountryController extends Controller
      */
     public function store(StoreCountryRequest $request)
     {
-        //
+        try {
+            $country_data = $request->validated();
+            $country_data['created_by'] = $request->user()->id;
+            Country::create($country_data);
+            return redirect()->route('admin.countries.index')->withSuccess('Country Added Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Country Role - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."])->withInput();
+        }
     }
 
     /**
@@ -37,7 +55,7 @@ class CountryController extends Controller
      */
     public function show(Country $country)
     {
-        //
+        return redirect()->route('admin.countries.index');
     }
 
     /**
@@ -45,7 +63,7 @@ class CountryController extends Controller
      */
     public function edit(Country $country)
     {
-        //
+        return view('countries.edit', ['item' => $country]);
     }
 
     /**
@@ -53,7 +71,16 @@ class CountryController extends Controller
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
-        //
+        try {
+            $country_data = $request->validated();
+            $country->fill($country_data);
+            $country->save();
+            return redirect()->route('admin.countries.index')->withSuccess('Country Updated Successfully!');
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Update Country - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."]);
+        }
     }
 
     /**
@@ -61,6 +88,14 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        //
+        try {
+            $countryName = $country->name;
+            $country->delete();
+            return back()->withSuccess("Country \"$countryName\" deleted successfully.");
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Delete Country - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while deleting the country. Error Log ID: $logid."]);
+        }
     }
 }

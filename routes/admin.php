@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\UserTypeController;
@@ -45,5 +46,9 @@ Route::middleware(['auth', 'verified', 'admin_auth'])->prefix('admin')->name('ad
 
     Route::resource('users', UserController::class)->missing(function (Request $request) {
         return Redirect::route('admin.users.index')->withErrors(["errors" => "Unable to find requested record."]);
+    });
+
+    Route::resource('countries', CountryController::class)->missing(function (Request $request) {
+        return Redirect::route('admin.countries.index')->withErrors(["errors" => "Unable to find requested record."]);
     });
 });
