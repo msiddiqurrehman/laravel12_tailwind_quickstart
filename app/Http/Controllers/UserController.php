@@ -319,6 +319,14 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        try {
+            $userName = $user->first_name . ' ' . $user->last_name;
+            $user->delete();
+            return back()->withSuccess("User \"$userName\" deleted successfully.");
+        } catch (Exception $e) {
+            $logid = time();
+            Log::error("LogId: $logid - Delete User - " . $e->getMessage());
+            return back()->withErrors(["errors" => "An error occurred while deleting the user. Error Log ID: $logid."]);
+        }
     }
 }
