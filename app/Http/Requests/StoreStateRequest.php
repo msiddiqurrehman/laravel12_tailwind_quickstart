@@ -11,7 +11,7 @@ class StoreStateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,21 @@ class StoreStateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => ['required', 'integer', 'digits:1', 'in:0,1'],
+            'name' => ['required', 'string', 'max:128'],
+            'country_id' => ['required', 'numeric', 'integer', 'exists:App\Models\Country,id'],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'country_id' => 'Country',
         ];
     }
 }

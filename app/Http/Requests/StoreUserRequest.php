@@ -62,7 +62,7 @@ class StoreUserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'designation_id.required_if' => '"Designation" is required when "User Type" is "Staff"',
+            'emp_detail.designation_id.required_if' => '"Designation" is required when "User Type" is "Staff"',
         ];
     }
 

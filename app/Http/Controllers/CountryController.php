@@ -45,7 +45,7 @@ class CountryController extends Controller
             return redirect()->route('admin.countries.index')->withSuccess('Country Added Successfully!');
         } catch (Exception $e) {
             $logid = time();
-            Log::error("LogId: $logid - Country Role - " . $e->getMessage());
+            Log::error("LogId: $logid - Create Country - " . $e->getMessage());
             return back()->withErrors(["errors" => "An error occurred while performing this action. Error Log ID: $logid."])->withInput();
         }
     }
