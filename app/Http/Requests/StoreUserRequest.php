@@ -75,7 +75,11 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'user_type_id' => 'user type',
-            'designation_id' => 'designation',
+            'emp_detail.designation_id' => 'designation',
+            'country_id' => 'country',
+            'state_id' => 'state',
+            'user_role_ids' => 'user role',
+            'user_role_ids.*' => 'user role at :position',
         ];
     }
 }
