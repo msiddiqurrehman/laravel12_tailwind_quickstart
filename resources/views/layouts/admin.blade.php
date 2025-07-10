@@ -9,7 +9,7 @@
                     'loaded': true, 
                     'darkMode': false, 
                     'stickyMenu': false, 
-                    'sidebarToggle': true, 
+                    'sidebarToggle': false, 
                     'scrollTop': false, 
                     'showConfirmDeleteModal': false,
                     'confirmModalMsg':'',
@@ -40,4 +40,6 @@
             </div>
         </div>
     </body>
+    {{-- @include('layouts.includes.admin.jslibraries')
+    @include('layouts.includes.admin.scripts') --}}
 </html>

@@ -23,10 +23,11 @@
                     </a>
                 </div>
                 <div class="p-5 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+
                     <!-- ====== Table Start -->
-                    <div class="mb-5 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                    <div class="mb-5 p-2.5 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                         <div class="max-w-full overflow-x-auto">
-                            <table class="min-w-full">
+                            <table id="to-data-table" class="display responsive">
                                 <!-- table header start -->
                                 <thead>
                                     <tr class="border-b border-gray-100 dark:border-gray-800">
@@ -149,7 +150,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <a href="javascript:void(0);" title="Delete"
-                                                        @click="showConfirmDeleteModal = true; formToDeleteId='{{ 'form-delete-'.$item->id }}'; confirmModalMsg='Are you sure to delete state <span class= \'font-medium \'>{{ $item->name }}</span>?'" 
+                                                        @click="showConfirmDeleteModal = true; formToDeleteId='{{ 'form-delete-'.$item->id }}'; confirmModalMsg='Are you sure to delete state <span class= \'font-medium \'>{{ str_replace("'", "\'", $item->name) }}</span>?'" 
                                                         class="text-red-600"
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
