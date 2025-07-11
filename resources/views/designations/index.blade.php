@@ -61,6 +61,20 @@
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                    Created At
+                                                </p>
+                                            </div>
+                                        </th>
+                                        <th class="px-5 py-3 sm:px-6">
+                                            <div class="flex items-center">
+                                                <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                    Last Updated
+                                                </p>
+                                            </div>
+                                        </th>
+                                        <th class="px-5 py-3 sm:px-6">
+                                            <div class="flex items-center">
+                                                <p class="font-semibold text-gray-700 dark:text-gray-400">
                                                     Action
                                                 </p>
                                             </div>
@@ -122,6 +136,16 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td class="px-5 py-4 sm:px-6">
+                                            <span class="text-gray-600 dark:text-gray-400">
+                                                {{ $item->created_at->format("d-m-Y H:i A") }}
+                                            </span>
+                                        </td>
+                                        <td class="px-5 py-4 sm:px-6">
+                                            <span class="text-gray-600 dark:text-gray-400">
+                                                {{ $item->updated_at->format("d-m-Y H:i A") }}
+                                            </span>
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <div class="flex items-center">
