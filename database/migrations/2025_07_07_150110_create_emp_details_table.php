@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('referrer_contact', length: 16)->nullable()->index();
             $table->string('identity_document_path', length: 512)->nullable();
             $table->string('education_document_path', length: 512)->nullable();
+            $table->string('resume_path', length: 512)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

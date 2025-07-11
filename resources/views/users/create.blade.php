@@ -129,7 +129,7 @@
                                     <x-input-label for="contact_no" :value="__('Contact No')" />
 
                                     <x-text-input id="contact_no" name="contact_no" type="text" class=""
-                                        :value="old('contact_no', '')" pattern="[0-9]{10,16}"
+                                        :value="old('contact_no', '')" placeholder="9876543210 / 00919876543210" pattern="[0-9]{10,16}"
                                         title="Contact no. format: - 9876543210 or 00919876543210" required />
 
                                     <x-input-error class="mt-2" :messages="$errors->get('contact_no')" />
@@ -140,7 +140,7 @@
                                     <x-input-label for="sec_contact_no" :value="__('Secondary Contact No')" />
 
                                     <x-text-input id="sec_contact_no" name="sec_contact_no" type="text" class=""
-                                        :value="old('sec_contact_no', '')" pattern="[0-9]{10,16}"
+                                        :value="old('sec_contact_no', '')" placeholder="9876543210 / 00919876543210" pattern="[0-9]{10,16}"
                                         title="Contact no. format: - 9876543210 or 00919876543210" />
 
                                     <x-input-error class="mt-2" :messages="$errors->get('sec_contact_no')" />
@@ -150,7 +150,7 @@
                                 <div>
                                     <x-input-label for="address" :value="__('Address')" />
 
-                                    <x-text-input type="text" name="address" id="address" placeholder="H. No., Street, Area"
+                                    <x-text-input type="text" name="address" id="address" placeholder="H. No., Floor, Apartment, Street, Area"
                                         value="{{ old('address', '') }}" />
 
                                     <x-input-error class="mt-2" :messages="$errors->get('address')" />
@@ -293,6 +293,11 @@
                                     <!-- Education Doc Image -->
                                     <div class="max-w-[275px]">
                                         <x-image-upload name="emp_detail[education_document]" label="Choose Education Document Image" ::disabled="selectedUserType != 1"/>
+                                    </div>
+
+                                    <!-- Resume -->
+                                    <div class="max-w-36.5">
+                                        <x-image-upload name="emp_detail[resume]" label="Choose Resume (PDF)" fileAccept="application/pdf, .doc, .docx" ::isImageUpload="false" ::disabled="selectedUserType != 1"/>
                                     </div>
                                 </div>
 

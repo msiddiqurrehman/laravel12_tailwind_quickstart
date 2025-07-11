@@ -20,6 +20,7 @@ class EmpDetail extends Model
         'referrer_contact',
         'identity_document_path',
         'education_document_path',
+        'resume_path',
     ];
 
     /**

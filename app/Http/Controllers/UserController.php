@@ -80,11 +80,11 @@ class UserController extends Controller
             if(!empty($user_data['user_image'])){
                 $extension = $request->user_image->extension();
                 $file_name = 'user_image_' . $new_user->id . '_' . time() . '.' . $extension;
-                $storage_path = 'user_images/profile';
+                $storage_path = 'user/images/profile';
 
                 $request->user_image->storePubliclyAs($storage_path, $file_name, 'public');
 
-                $image_path = 'storage/user_images/profile/' . $file_name;
+                $image_path = 'storage/' . $storage_path . '/' . $file_name;
                 $new_user->image_path = $image_path;
                 $new_user->save();
             }
@@ -107,11 +107,11 @@ class UserController extends Controller
                     $identity_doc_image = $user_data['emp_detail']['identity_document'];
                     $extension = $identity_doc_image->extension();
                     $file_name = 'id_' . $new_user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user_images/identity_document';
+                    $storage_path = 'user/docs/identity_document';
 
                     $identity_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
 
-                    $identity_document_path = 'storage/user_images/identity_document/' . $file_name;
+                    $identity_document_path = 'storage/' . $storage_path . '/' . $file_name;
                     $emp_detail['identity_document_path'] = $identity_document_path;
                 }
 
@@ -120,12 +120,25 @@ class UserController extends Controller
                     $education_doc_image = $user_data['emp_detail']['education_document'];
                     $extension = $education_doc_image->extension();
                     $file_name = 'edu_doc_' . $new_user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user_images/education_document';
+                    $storage_path = 'user/docs/education_document';
 
                     $education_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
 
-                    $education_document_path = 'storage/user_images/education_document/' . $file_name;
+                    $education_document_path = 'storage/' . $storage_path . '/' . $file_name;
                     $emp_detail['education_document_path'] = $education_document_path;
+                }
+
+                // Upload resume if exists.
+                if (!empty($user_data['emp_detail']['resume'])) {
+                    $resume = $user_data['emp_detail']['resume'];
+                    $extension = $resume->extension();
+                    $file_name = 'resume_' . $new_user->id . '_' . time() . '.' . $extension;
+                    $storage_path = 'user/docs/resumes';
+
+                    $resume->storePubliclyAs($storage_path, $file_name, 'public');
+
+                    $resume_path = 'storage/' . $storage_path . '/' . $file_name;
+                    $emp_detail['resume_path'] = $resume_path;
                 }
 
                 // Save Staff (Employee) Details to database
@@ -251,11 +264,11 @@ class UserController extends Controller
                     $identity_doc_image = $emp_detail['identity_document'];
                     $extension = $identity_doc_image->extension();
                     $file_name = 'id_' . $user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user_images/identity_document';
+                    $storage_path = 'user/docs/identity_document';
 
                     $identity_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
 
-                    $identity_document_path = 'storage/user_images/identity_document/' . $file_name;
+                    $identity_document_path = 'storage/' . $storage_path . '/' . $file_name;
                     $emp_detail['identity_document_path'] = $identity_document_path;
                 } else {
                     if (!empty($emp_detail['delete-id-doc'])) {
@@ -281,11 +294,11 @@ class UserController extends Controller
                     $education_doc_image = $emp_detail['education_document'];
                     $extension = $education_doc_image->extension();
                     $file_name = 'edu_doc_' . $user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user_images/education_document';
+                    $storage_path = 'user/docs/education_document';
 
                     $education_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
 
-                    $education_document_path = 'storage/user_images/education_document/' . $file_name;
+                    $education_document_path = 'storage/' . $storage_path . '/' . $file_name;
                     $emp_detail['education_document_path'] = $education_document_path;
                 } else {
                     if (!empty($emp_detail['delete-edu-doc'])) {
@@ -295,6 +308,36 @@ class UserController extends Controller
                             Storage::disk('public')->delete($file_path);
                         }
                         $emp_detail['education_document_path'] = null;
+                    }
+                }
+
+                // Update resume if exists.
+                if (!empty($emp_detail['resume'])) {
+
+                    // Delete Old Image
+                    $existing_resume = $user->empDetail != null ? $user->empDetail->resume_path : '';
+                    if (!empty($existing_resume)) {
+                        $file_path = ltrim($existing_resume, 'storage/');
+                        Storage::disk('public')->delete($file_path);
+                    }
+
+                    $resume = $emp_detail['resume'];
+                    $extension = $resume->extension();
+                    $file_name = 'resume_' . $user->id . '_' . time() . '.' . $extension;
+                    $storage_path = 'user/docs/resumes';
+
+                    $resume->storePubliclyAs($storage_path, $file_name, 'public');
+
+                    $resume_path = 'storage/' . $storage_path . '/' . $file_name;
+                    $emp_detail['resume_path'] = $resume_path;
+                } else {
+                    if (!empty($emp_detail['delete-resume'])) {
+                        $existing_resume = $user->empDetail != null ? $user->empDetail->resume_path : '';
+                        if (!empty($existing_resume)) {
+                            $file_path = ltrim($existing_resume, 'storage/');
+                            Storage::disk('public')->delete($file_path);
+                        }
+                        $emp_detail['resume_path'] = null;
                     }
                 }
 

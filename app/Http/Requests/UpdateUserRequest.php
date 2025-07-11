@@ -53,8 +53,10 @@ class UpdateUserRequest extends FormRequest
             'emp_detail.referrer_contact' => ['nullable', 'numeric', 'digits_between:10,16'],
             'emp_detail.identity_document' => ['nullable', 'file', 'image', 'max:2048'],
             'emp_detail.education_document' => ['nullable', 'file', 'image', 'max:2048'],
+            'emp_detail.resume' => ['nullable', 'file', 'extensions:pdf', 'mimes:pdf', 'max:2048'],
             'emp_detail.delete-id-doc' => ['nullable', 'numeric', 'integer', 'digits:1', 'in:1'],
             'emp_detail.delete-edu-doc' => ['nullable', 'numeric', 'integer', 'digits:1', 'in:1'],
+            'emp_detail.delete-resume' => ['nullable', 'numeric', 'integer', 'digits:1', 'in:1'],
         ];
     }
 

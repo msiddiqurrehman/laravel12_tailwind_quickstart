@@ -318,6 +318,15 @@
                                             </div>
                                         </x-image-upload>
                                     </div>
+
+                                    <!-- Resume -->
+                                    <div class="max-w-36.5">
+                                        <x-image-upload name="emp_detail[resume]" label="Choose Resume" fileAccept="application/pdf" :isImageUpload="false" ::disabled="selectedUserType != 1" oldImagePath="{{ $item->empDetail != null && !empty($item->empDetail->resume_path) ? asset($item->empDetail->resume_path) : '' }}">
+                                            <div class="py-2 my-3">
+                                                <x-checkbox-input id="chk-delete-resume" name="emp_detail[delete-resume]" label="Delete Resume" value="1" isChecked="{{ old('delete-resume') == 1 ? 'true' : 'false'}}" ::disabled="selectedUserType != 1" />
+                                            </div>
+                                        </x-image-upload>
+                                    </div>
                                 </div>
 
                                 <div id="user_type_partner_fields" x-show="selectedUserType == 2">
