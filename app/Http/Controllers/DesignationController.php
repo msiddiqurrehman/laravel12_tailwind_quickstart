@@ -17,7 +17,7 @@ class DesignationController extends Controller
     public function index()
     {
         try {
-            $designations = Designation::orderByDesc('id')->paginate(25);
+            $designations = Designation::orderByDesc('id')->simplePaginate(1000);
             return view('designations.index', ['dataItems' => $designations]);
         } catch (Exception $e) {
             $logid = time();

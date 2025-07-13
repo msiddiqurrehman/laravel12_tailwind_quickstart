@@ -23,6 +23,14 @@
                     </a>
                 </div>
                 <div class="p-5 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+                    <div class="relative mb-2.5 pb-3">
+                        {{ $dataItems->links() }}
+                        <div>
+                            <div class="w-80 md:mx-auto md:-mt-8">
+                                {{ "Showing Batch no. " . $dataItems->currentPage() . " containing " . $dataItems->count() . " entries." }}
+                            </div>
+                        </div>
+                    </div>
                     <!-- ====== Table Start -->
                     <div class="mb-5 p-2.5 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                         <div class="max-w-full overflow-x-auto">
@@ -188,7 +196,6 @@
                         </div>
                     </div>
                     <!-- ====== Table End -->
-                    {{ $dataItems->links() }}
                 </div>
             </div>
         </div>

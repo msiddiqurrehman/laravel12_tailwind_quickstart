@@ -16,7 +16,7 @@ class CountryController extends Controller
     public function index()
     {
         try {
-            $countries = Country::orderBy('name')->paginate(25);
+            $countries = Country::orderBy('name')->simplePaginate(1000);
             return view('countries.index', ['dataItems' => $countries]);
         } catch (Exception $e) {
             $logid = time();

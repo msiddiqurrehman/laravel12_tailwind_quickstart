@@ -17,7 +17,7 @@ class PermissionController extends Controller
     public function index()
     {
         try {
-            $permissions = Permission::orderByDesc('role_id')->paginate(25);
+            $permissions = Permission::orderByDesc('role_id')->simplePaginate(1000);
             return view('permissions.index', ['dataItems' => $permissions]);
         } catch (Exception $e) {
             $logid = time();

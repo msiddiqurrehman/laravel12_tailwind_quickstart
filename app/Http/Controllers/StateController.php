@@ -17,7 +17,7 @@ class StateController extends Controller
     public function index()
     {
         try {
-            $states = State::orderBy('name')->paginate(25);
+            $states = State::orderBy('name')->simplePaginate(1000);
             return view('states.index', ['dataItems' => $states]);
         } catch (Exception $e) {
             $logid = time();

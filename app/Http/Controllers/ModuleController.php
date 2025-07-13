@@ -17,7 +17,7 @@ class ModuleController extends Controller
     public function index()
     {
         try {
-            $modules = Module::orderByDesc('id')->paginate(25);
+            $modules = Module::orderByDesc('id')->simplePaginate(1000);
             return view('modules.index', ['dataItems' => $modules]);
         } catch (Exception $e) {
             $logid = time();

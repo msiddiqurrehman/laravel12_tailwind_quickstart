@@ -26,7 +26,7 @@ class UserController extends Controller
             $users = User::where('id', '!=', '1')
                             ->where('id', '!=', '2')
                             ->orderBy('first_name')
-                            ->paginate(25);
+                            ->simplePaginate(1000);
             return view('users.index', ['dataItems' => $users]);
         } catch (Exception $e) {
             $logid = time();
@@ -364,6 +364,31 @@ class UserController extends Controller
     {
         try {
             $userName = $user->first_name . ' ' . $user->last_name;
+            
+            // Delete User Image
+            if(!empty($user->image_path)){
+                $file_path = ltrim($user->image_path, 'storage/');
+                Storage::disk('public')->delete($file_path);
+            }
+
+            // Delete Identity Doc Image
+            if (!empty($user->empDetail) && !empty($user->empDetail->identity_document_path)) {
+                $file_path = ltrim($user->empDetail->identity_document_path, 'storage/');
+                Storage::disk('public')->delete($file_path);
+            }
+
+            // Delete Education Doc Image
+            if (!empty($user->empDetail) && !empty($user->empDetail->education_document_path)) {
+                $file_path = ltrim($user->empDetail->education_document_path, 'storage/');
+                Storage::disk('public')->delete($file_path);
+            }
+
+            // Delete Resume
+            if (!empty($user->empDetail) && !empty($user->empDetail->resume_path)) {
+                $file_path = ltrim($user->empDetail->resume_path, 'storage/');
+                Storage::disk('public')->delete($file_path);
+            }
+
             $user->delete();
             return back()->withSuccess("User \"$userName\" deleted successfully.");
         } catch (Exception $e) {

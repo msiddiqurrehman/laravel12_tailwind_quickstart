@@ -17,7 +17,7 @@ class UserTypeController extends Controller
     public function index()
     {
         try {
-            $usertypes = UserType::orderByDesc('id')->paginate(25);
+            $usertypes = UserType::orderByDesc('id')->simplePaginate(1000);
             return view('usertypes.index', ['dataItems' => $usertypes]);
         } catch (Exception $e) {
             $logid = time();
