@@ -8,11 +8,29 @@ use Illuminate\Auth\Access\Response;
 class UserPolicy
 {
     /**
+     * Assign slug value for module which
+     * should be identical to slug field value 
+     * for this module in database modules table.
+     */
+    private $module_slug = "users";
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_view');
+
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -20,7 +38,18 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_view');
+
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -28,7 +57,17 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_create');
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -36,7 +75,17 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_edit');
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -44,7 +93,17 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_delete');
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**

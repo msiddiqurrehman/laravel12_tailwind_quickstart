@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCountryRequest;
 use App\Http\Requests\UpdateCountryRequest;
 use App\Models\Country;
+
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class CountryController extends Controller
@@ -15,6 +17,16 @@ class CountryController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        if(!$user->status) {
+            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+        
+        if ($user->cannot('viewAny', Country::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $countries = Country::orderBy('name')->simplePaginate(1000);
             return view('countries.index', ['dataItems' => $countries]);
@@ -30,6 +42,16 @@ class CountryController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+
+        if (!$user->status) {
+            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
+        if ($user->cannot('create', Country::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return view('countries.create');
     }
 
@@ -38,6 +60,16 @@ class CountryController extends Controller
      */
     public function store(StoreCountryRequest $request)
     {
+        $user = Auth::user();
+
+        if (!$user->status) {
+            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
+        if ($user->cannot('create', Country::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $country_data = $request->validated();
             $country_data['created_by'] = $request->user()->id;
@@ -55,6 +87,16 @@ class CountryController extends Controller
      */
     public function show(Country $country)
     {
+        $user = Auth::user();
+
+        if (!$user->status) {
+            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
+        if ($user->cannot('view', $country)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return redirect()->route('admin.countries.index');
     }
 
@@ -63,6 +105,16 @@ class CountryController extends Controller
      */
     public function edit(Country $country)
     {
+        $user = Auth::user();
+
+        if (!$user->status) {
+            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
+        if ($user->cannot('update', $country)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return view('countries.edit', ['item' => $country]);
     }
 
@@ -71,6 +123,16 @@ class CountryController extends Controller
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
+        $user = Auth::user();
+
+        if (!$user->status) {
+            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
+        if ($user->cannot('update', $country)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $country_data = $request->validated();
             $country->fill($country_data);
@@ -88,6 +150,16 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
+        $user = Auth::user();
+
+        if (!$user->status) {
+            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
+        if ($user->cannot('delete', $country)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $countryName = $country->name;
             $country->delete();

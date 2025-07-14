@@ -112,6 +112,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if User is Active.
+     *
+     * @return boolean
+     */
+    public function isUserActive(): bool
+    {
+        return $this->status == 1;
+    }
+
+    /**
      * Get the employee details associated with the user.
      */
     public function empDetail(): HasOne

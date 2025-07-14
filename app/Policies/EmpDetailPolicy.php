@@ -9,11 +9,29 @@ use Illuminate\Auth\Access\Response;
 class EmpDetailPolicy
 {
     /**
+     * Assign slug value for module which
+     * should be identical to slug field value 
+     * for this module in database modules table.
+     */
+    private $module_slug = "emp_details";
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_view');
+
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -21,7 +39,18 @@ class EmpDetailPolicy
      */
     public function view(User $user, EmpDetail $empDetail): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_view');
+
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -29,7 +58,17 @@ class EmpDetailPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_create');
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -37,7 +76,17 @@ class EmpDetailPolicy
      */
     public function update(User $user, EmpDetail $empDetail): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_edit');
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -45,7 +94,17 @@ class EmpDetailPolicy
      */
     public function delete(User $user, EmpDetail $empDetail): bool
     {
-        return false;
+        $module = getModuleBySlug($this->module_slug);
+
+        if (empty($module)) {
+            return false;
+        }
+
+        $is_allowed = hasUserPermissionsByModule($user, $module->id, 'can_delete');
+        if ($is_allowed)
+            return true;
+        else
+            return false;
     }
 
     /**

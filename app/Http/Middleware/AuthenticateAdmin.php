@@ -17,7 +17,7 @@ class AuthenticateAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(! $request->user()->isUserAdmin()){
+        if(! $request->user()->isUserAdmin() || ! $request->user()->isUserActive()){
             Auth::guard('web')->logout();
 
             $request->session()->invalidate();

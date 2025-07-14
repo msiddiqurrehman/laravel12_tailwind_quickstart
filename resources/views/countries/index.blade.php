@@ -165,7 +165,7 @@
 
                                                         @if($item->creator->id != 1 && $item->creator->id != 2)
                                                             <span class="block text-gray-500 text-theme-sm dark:text-gray-400">
-                                                                {{ $item->creator->designation->title }}
+                                                                {{ $item->creator && $item->creator->designation ? $item->creator->designation->title : '' }}
                                                             </span>
                                                         @endif
                                                     </div>

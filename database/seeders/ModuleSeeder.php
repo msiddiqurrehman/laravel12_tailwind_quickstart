@@ -18,6 +18,7 @@ class ModuleSeeder extends Seeder
             ['name' => 'Modules', 'slug' => 'modules', 'created_by' => 1],
             ['name' => 'Users Types', 'slug' => 'user_types', 'created_by' => 1],
             ['name' => 'Users', 'slug' => 'users', 'created_by' => 1],
+            ['name' => 'Employee Details', 'slug' => 'emp_details', 'created_by' => 1],
             ['name' => 'Roles', 'slug' => 'roles', 'created_by' => 1],
             ['name' => 'Permissions', 'slug' => 'permissions', 'created_by' => 1],
             ['name' => 'Designations', 'slug' => 'designations', 'created_by' => 1],

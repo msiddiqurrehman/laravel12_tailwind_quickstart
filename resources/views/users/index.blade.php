@@ -196,6 +196,13 @@
                                                         <th class="px-5 py-3 sm:px-6">
                                                             <div class="flex items-center">
                                                                 <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                                    Assigned Roles
+                                                                </p>
+                                                            </div>
+                                                        </th>
+                                                        <th class="px-5 py-3 sm:px-6">
+                                                            <div class="flex items-center">
+                                                                <p class="font-semibold text-gray-700 dark:text-gray-400">
                                                                     Created By
                                                                 </p>
                                                             </div>
@@ -218,6 +225,20 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
+                                                        <td class="px-5 py-4 sm:px-6">
+                                                            @php
+                                                                $assigned_roles = [];
+                                                            
+                                                                if($item->roles){
+                                                                    foreach($item->roles as $role){
+                                                                        $assigned_roles[] = $role->title;
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            <span class="text-gray-600 dark:text-gray-400">
+                                                                {{ implode(', ', $assigned_roles) }}
+                                                            </span>
+                                                        </td>
                                                         <td class="px-5 py-4 sm:px-6">
                                                             <div class="flex items-center">
                                                                 <div class="flex items-center gap-3">

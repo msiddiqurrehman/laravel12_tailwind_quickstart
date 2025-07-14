@@ -38,7 +38,7 @@ class UpdateUserRequest extends FormRequest
             'contact_no' => ['nullable', 'numeric', 'digits_between:10,16'],
             'sec_contact_no' => ['nullable', 'numeric', 'digits_between:10,16'],
             'user_type_id' => ['required', 'numeric', 'integer', 'exists:App\Models\UserType,id'],
-            'user_image' => ['nullable', 'file', 'image', 'max:2048'],
+            'user_image' => ['nullable', 'file', 'image', 'max:128'],
             'delete-user-image' => ['nullable', 'numeric', 'integer', 'digits:1', 'in:1'],
             'user_role_ids' => ['nullable', 'array'],
             'user_role_ids.*' => ['nullable', 'required_with:user_role_ids', 'numeric', 'integer', 'exists:App\Models\Role,id'],
@@ -51,9 +51,9 @@ class UpdateUserRequest extends FormRequest
             'emp_detail.designation_id' => ['nullable', 'required_if:user_type_id,1', 'numeric', 'integer', 'exists:App\Models\Designation,id'],
             'emp_detail.referrer_name' => ['nullable', 'string', 'max:128'],
             'emp_detail.referrer_contact' => ['nullable', 'numeric', 'digits_between:10,16'],
-            'emp_detail.identity_document' => ['nullable', 'file', 'image', 'max:2048'],
-            'emp_detail.education_document' => ['nullable', 'file', 'image', 'max:2048'],
-            'emp_detail.resume' => ['nullable', 'file', 'extensions:pdf', 'mimes:pdf', 'max:2048'],
+            'emp_detail.identity_document' => ['nullable', 'file', 'image', 'max:128'],
+            'emp_detail.education_document' => ['nullable', 'file', 'image', 'max:128'],
+            'emp_detail.resume' => ['nullable', 'file', 'extensions:pdf', 'mimes:pdf', 'max:128'],
             'emp_detail.delete-id-doc' => ['nullable', 'numeric', 'integer', 'digits:1', 'in:1'],
             'emp_detail.delete-edu-doc' => ['nullable', 'numeric', 'integer', 'digits:1', 'in:1'],
             'emp_detail.delete-resume' => ['nullable', 'numeric', 'integer', 'digits:1', 'in:1'],
@@ -86,6 +86,7 @@ class UpdateUserRequest extends FormRequest
             'state_id' => 'state',
             'user_role_ids' => 'user role',
             'user_role_ids.*' => 'user role at :position',
+            'user_image' => 'image file'
         ];
     }
 }
