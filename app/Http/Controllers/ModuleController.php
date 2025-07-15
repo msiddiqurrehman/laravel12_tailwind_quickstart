@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateModuleRequest;
 use App\Models\Module;
 
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ModuleController extends Controller
@@ -16,6 +17,12 @@ class ModuleController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('viewAny', Module::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $modules = Module::orderByDesc('id')->simplePaginate(1000);
             return view('modules.index', ['dataItems' => $modules]);
@@ -31,6 +38,12 @@ class ModuleController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', Module::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return view('modules.create');
     }
 
@@ -39,6 +52,12 @@ class ModuleController extends Controller
      */
     public function store(StoreModuleRequest $request)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', Module::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try{
             $module_data = $request->validated();
             $module_data['created_by'] = $request->user()->id;
@@ -65,6 +84,12 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('view', $module)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return redirect()->route('admin.modules.index');
     }
 
@@ -73,6 +98,12 @@ class ModuleController extends Controller
      */
     public function edit(Module $module)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $module)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return view('modules.edit', ['item' => $module]);
     }
 
@@ -81,6 +112,12 @@ class ModuleController extends Controller
      */
     public function update(UpdateModuleRequest $request, Module $module)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $module)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try{
             $module_data = $request->validated();
             $module->fill($module_data);
@@ -98,6 +135,12 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('delete', $module)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $moduleName = $module->name;
             $module->delete();

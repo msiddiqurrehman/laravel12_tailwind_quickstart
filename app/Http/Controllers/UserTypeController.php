@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserTypeRequest;
 use App\Models\UserType;
 
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class UserTypeController extends Controller
@@ -16,6 +17,12 @@ class UserTypeController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('viewAny', UserType::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $usertypes = UserType::orderByDesc('id')->simplePaginate(1000);
             return view('usertypes.index', ['dataItems' => $usertypes]);
@@ -31,6 +38,12 @@ class UserTypeController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', UserType::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return view('usertypes.create');
     }
 
@@ -39,6 +52,12 @@ class UserTypeController extends Controller
      */
     public function store(StoreUserTypeRequest $request)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', UserType::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $usertype_data = $request->validated();
             $usertype_data['created_by'] = $request->user()->id;
@@ -56,6 +75,12 @@ class UserTypeController extends Controller
      */
     public function show(UserType $userType)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('view', $userType)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return redirect()->route('admin.userTypes.index');
     }
 
@@ -64,6 +89,12 @@ class UserTypeController extends Controller
      */
     public function edit(UserType $userType)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $userType)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return view('usertypes.edit', ['item' => $userType]);
     }
 
@@ -72,6 +103,12 @@ class UserTypeController extends Controller
      */
     public function update(UpdateUserTypeRequest $request, UserType $userType)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $userType)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $usertype_data = $request->validated();
             $userType->fill($usertype_data);
@@ -89,6 +126,12 @@ class UserTypeController extends Controller
      */
     public function destroy(UserType $userType)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('delete', $userType)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $userTypeName = $userType->type;
             $userType->delete();

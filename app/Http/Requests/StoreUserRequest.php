@@ -46,7 +46,7 @@ class StoreUserRequest extends FormRequest
             'state_id' => ['nullable', 'numeric', 'integer', 'exists:App\Models\State,id'],
             'country_id' => ['nullable', 'numeric', 'integer', 'exists:App\Models\Country,id'],
             //User Type Staff (Employee) Details
-            'emp_detail.designation_id' => ['nullable', 'required_if:user_type_id,1', 'numeric', 'integer', 'exists:App\Models\Designation,id'],
+            'emp_detail.designation_id' => ['nullable', 'numeric', 'integer', 'exists:App\Models\Designation,id'],
             'emp_detail.referrer_name' => ['nullable', 'string', 'max:128'],
             'emp_detail.referrer_contact' => ['nullable', 'numeric', 'digits_between:10,16'],
             'emp_detail.identity_document' => ['nullable', 'file', 'image', 'max:128'],

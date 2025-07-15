@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateDesignationRequest;
 use App\Models\Designation;
 
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class DesignationController extends Controller
@@ -16,6 +17,12 @@ class DesignationController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('viewAny', Designation::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $designations = Designation::orderByDesc('id')->simplePaginate(1000);
             return view('designations.index', ['dataItems' => $designations]);
@@ -31,6 +38,12 @@ class DesignationController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', Designation::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return view('designations.create');
     }
 
@@ -39,6 +52,12 @@ class DesignationController extends Controller
      */
     public function store(StoreDesignationRequest $request)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', Designation::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $designation_data = $request->validated();
             $designation_data['created_by'] = $request->user()->id;
@@ -56,6 +75,12 @@ class DesignationController extends Controller
      */
     public function show(Designation $designation)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('view', $designation)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return redirect()->route('admin.designations.index');
     }
 
@@ -64,6 +89,12 @@ class DesignationController extends Controller
      */
     public function edit(Designation $designation)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $designation)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return view('designations.edit', ['item' => $designation]);
     }
 
@@ -72,6 +103,12 @@ class DesignationController extends Controller
      */
     public function update(UpdateDesignationRequest $request, Designation $designation)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $designation)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $designation_data = $request->validated();
             $designation->fill($designation_data);
@@ -89,6 +126,12 @@ class DesignationController extends Controller
      */
     public function destroy(Designation $designation)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('delete', $designation)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $designationName = $designation->title;
             $designation->delete();

@@ -6,12 +6,14 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Country;
 use App\Models\Designation;
+use App\Models\EmpDetail;
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\State;
 use App\Models\User;
 use App\Models\UserType;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,6 +24,12 @@ class UserController extends Controller
      */
     public function index()
     {
+        $auth_user = Auth::user();
+
+        if ($auth_user->cannot('viewAny', User::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $users = User::where('id', '!=', '1')
                             ->where('id', '!=', '2')
@@ -40,6 +48,12 @@ class UserController extends Controller
      */
     public function create()
     {
+        $auth_user = Auth::user();
+
+        if ($auth_user->cannot('create', User::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $designations = Designation::orderBy('title')->get();
             $usertypes = UserType::orderBy('type')->get();
@@ -69,6 +83,12 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        $auth_user = Auth::user();
+
+        if ($auth_user->cannot('create', User::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $user_data = $request->validated();
             // dd($user_data);
@@ -99,50 +119,52 @@ class UserController extends Controller
             }
 
             // Store Employee Details if exists.
-            if ($user_data['user_type_id'] == 1 && !empty($user_data['emp_detail'])) {
-                $emp_detail = $user_data['emp_detail'];
+            if ($auth_user->can('create', EmpDetail::class)) {
+                if ($user_data['user_type_id'] == 1 && !empty($user_data['emp_detail'])) {
+                    $emp_detail = $user_data['emp_detail'];
 
-                // Upload identity document if exists.
-                if (!empty($user_data['emp_detail']['identity_document'])) {
-                    $identity_doc_image = $user_data['emp_detail']['identity_document'];
-                    $extension = $identity_doc_image->extension();
-                    $file_name = 'id_' . $new_user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user/docs/identity_document';
+                    // Upload identity document if exists.
+                    if (!empty($user_data['emp_detail']['identity_document'])) {
+                        $identity_doc_image = $user_data['emp_detail']['identity_document'];
+                        $extension = $identity_doc_image->extension();
+                        $file_name = 'id_' . $new_user->id . '_' . time() . '.' . $extension;
+                        $storage_path = 'user/docs/identity_document';
 
-                    $identity_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
+                        $identity_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
 
-                    $identity_document_path = 'storage/' . $storage_path . '/' . $file_name;
-                    $emp_detail['identity_document_path'] = $identity_document_path;
+                        $identity_document_path = 'storage/' . $storage_path . '/' . $file_name;
+                        $emp_detail['identity_document_path'] = $identity_document_path;
+                    }
+
+                    // Upload educational document if exists.
+                    if (!empty($user_data['emp_detail']['education_document'])) {
+                        $education_doc_image = $user_data['emp_detail']['education_document'];
+                        $extension = $education_doc_image->extension();
+                        $file_name = 'edu_doc_' . $new_user->id . '_' . time() . '.' . $extension;
+                        $storage_path = 'user/docs/education_document';
+
+                        $education_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                        $education_document_path = 'storage/' . $storage_path . '/' . $file_name;
+                        $emp_detail['education_document_path'] = $education_document_path;
+                    }
+
+                    // Upload resume if exists.
+                    if (!empty($user_data['emp_detail']['resume'])) {
+                        $resume = $user_data['emp_detail']['resume'];
+                        $extension = $resume->extension();
+                        $file_name = 'resume_' . $new_user->id . '_' . time() . '.' . $extension;
+                        $storage_path = 'user/docs/resumes';
+
+                        $resume->storePubliclyAs($storage_path, $file_name, 'public');
+
+                        $resume_path = 'storage/' . $storage_path . '/' . $file_name;
+                        $emp_detail['resume_path'] = $resume_path;
+                    }
+
+                    // Save Staff (Employee) Details to database
+                    $new_user->empDetail()->create($emp_detail);
                 }
-
-                // Upload educational document if exists.
-                if (!empty($user_data['emp_detail']['education_document'])) {
-                    $education_doc_image = $user_data['emp_detail']['education_document'];
-                    $extension = $education_doc_image->extension();
-                    $file_name = 'edu_doc_' . $new_user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user/docs/education_document';
-
-                    $education_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
-
-                    $education_document_path = 'storage/' . $storage_path . '/' . $file_name;
-                    $emp_detail['education_document_path'] = $education_document_path;
-                }
-
-                // Upload resume if exists.
-                if (!empty($user_data['emp_detail']['resume'])) {
-                    $resume = $user_data['emp_detail']['resume'];
-                    $extension = $resume->extension();
-                    $file_name = 'resume_' . $new_user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user/docs/resumes';
-
-                    $resume->storePubliclyAs($storage_path, $file_name, 'public');
-
-                    $resume_path = 'storage/' . $storage_path . '/' . $file_name;
-                    $emp_detail['resume_path'] = $resume_path;
-                }
-
-                // Save Staff (Employee) Details to database
-                $new_user->empDetail()->create($emp_detail);
             }
 
             return redirect()->route('admin.users.index')->withSuccess('User Added Successfully!');
@@ -159,6 +181,12 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $auth_user = Auth::user();
+
+        if ($auth_user->cannot('view', $user)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return redirect()->route('admin.users.index');
     }
 
@@ -167,6 +195,12 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $auth_user = Auth::user();
+
+        if ($auth_user->cannot('update', $user)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $designations = Designation::orderBy('title')->get();
             $usertypes = UserType::orderBy('type')->get();
@@ -200,6 +234,12 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        $auth_user = Auth::user();
+
+        if ($auth_user->cannot('update', $user)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try{
             $user_data = $request->validated();
             // dd($request->all(), $user_data);
@@ -248,105 +288,107 @@ class UserController extends Controller
             $user->roles()->sync($role_ids);
 
             // Update Employee Details.
-            if ($user_data['user_type_id'] == 1 && !empty($user_data['emp_detail'])) {
-                $emp_detail = $user_data['emp_detail'];
+            if ($auth_user->can('update', $user->empDetail)) {
+                if ($user_data['user_type_id'] == 1 && !empty($user_data['emp_detail'])) {
+                    $emp_detail = $user_data['emp_detail'];
 
-                // Update identity document.
-                if (!empty($emp_detail['identity_document'])) {
+                    // Update identity document.
+                    if (!empty($emp_detail['identity_document'])) {
 
-                    // Delete Old Image
-                    $existing_id_doc_image = $user->empDetail != null ? $user->empDetail->identity_document_path : '';
-                    if (!empty($existing_id_doc_image)) {
-                        $file_path = ltrim($existing_id_doc_image, 'storage/');
-                        Storage::disk('public')->delete($file_path);
-                    }
-
-                    $identity_doc_image = $emp_detail['identity_document'];
-                    $extension = $identity_doc_image->extension();
-                    $file_name = 'id_' . $user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user/docs/identity_document';
-
-                    $identity_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
-
-                    $identity_document_path = 'storage/' . $storage_path . '/' . $file_name;
-                    $emp_detail['identity_document_path'] = $identity_document_path;
-                } else {
-                    if (!empty($emp_detail['delete-id-doc'])) {
+                        // Delete Old Image
                         $existing_id_doc_image = $user->empDetail != null ? $user->empDetail->identity_document_path : '';
                         if (!empty($existing_id_doc_image)) {
                             $file_path = ltrim($existing_id_doc_image, 'storage/');
                             Storage::disk('public')->delete($file_path);
                         }
-                        $emp_detail['identity_document_path'] = null;
+
+                        $identity_doc_image = $emp_detail['identity_document'];
+                        $extension = $identity_doc_image->extension();
+                        $file_name = 'id_' . $user->id . '_' . time() . '.' . $extension;
+                        $storage_path = 'user/docs/identity_document';
+
+                        $identity_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                        $identity_document_path = 'storage/' . $storage_path . '/' . $file_name;
+                        $emp_detail['identity_document_path'] = $identity_document_path;
+                    } else {
+                        if (!empty($emp_detail['delete-id-doc'])) {
+                            $existing_id_doc_image = $user->empDetail != null ? $user->empDetail->identity_document_path : '';
+                            if (!empty($existing_id_doc_image)) {
+                                $file_path = ltrim($existing_id_doc_image, 'storage/');
+                                Storage::disk('public')->delete($file_path);
+                            }
+                            $emp_detail['identity_document_path'] = null;
+                        }
                     }
-                }
 
-                // Update educational document if exists.
-                if (!empty($emp_detail['education_document'])) {
+                    // Update educational document if exists.
+                    if (!empty($emp_detail['education_document'])) {
 
-                    // Delete Old Image
-                    $existing_edu_doc_image = $user->empDetail != null ? $user->empDetail->education_document_path : '';
-                    if (!empty($existing_edu_doc_image)) {
-                        $file_path = ltrim($existing_edu_doc_image, 'storage/');
-                        Storage::disk('public')->delete($file_path);
-                    }
-
-                    $education_doc_image = $emp_detail['education_document'];
-                    $extension = $education_doc_image->extension();
-                    $file_name = 'edu_doc_' . $user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user/docs/education_document';
-
-                    $education_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
-
-                    $education_document_path = 'storage/' . $storage_path . '/' . $file_name;
-                    $emp_detail['education_document_path'] = $education_document_path;
-                } else {
-                    if (!empty($emp_detail['delete-edu-doc'])) {
+                        // Delete Old Image
                         $existing_edu_doc_image = $user->empDetail != null ? $user->empDetail->education_document_path : '';
                         if (!empty($existing_edu_doc_image)) {
                             $file_path = ltrim($existing_edu_doc_image, 'storage/');
                             Storage::disk('public')->delete($file_path);
                         }
-                        $emp_detail['education_document_path'] = null;
+
+                        $education_doc_image = $emp_detail['education_document'];
+                        $extension = $education_doc_image->extension();
+                        $file_name = 'edu_doc_' . $user->id . '_' . time() . '.' . $extension;
+                        $storage_path = 'user/docs/education_document';
+
+                        $education_doc_image->storePubliclyAs($storage_path, $file_name, 'public');
+
+                        $education_document_path = 'storage/' . $storage_path . '/' . $file_name;
+                        $emp_detail['education_document_path'] = $education_document_path;
+                    } else {
+                        if (!empty($emp_detail['delete-edu-doc'])) {
+                            $existing_edu_doc_image = $user->empDetail != null ? $user->empDetail->education_document_path : '';
+                            if (!empty($existing_edu_doc_image)) {
+                                $file_path = ltrim($existing_edu_doc_image, 'storage/');
+                                Storage::disk('public')->delete($file_path);
+                            }
+                            $emp_detail['education_document_path'] = null;
+                        }
                     }
-                }
 
-                // Update resume if exists.
-                if (!empty($emp_detail['resume'])) {
+                    // Update resume if exists.
+                    if (!empty($emp_detail['resume'])) {
 
-                    // Delete Old Image
-                    $existing_resume = $user->empDetail != null ? $user->empDetail->resume_path : '';
-                    if (!empty($existing_resume)) {
-                        $file_path = ltrim($existing_resume, 'storage/');
-                        Storage::disk('public')->delete($file_path);
-                    }
-
-                    $resume = $emp_detail['resume'];
-                    $extension = $resume->extension();
-                    $file_name = 'resume_' . $user->id . '_' . time() . '.' . $extension;
-                    $storage_path = 'user/docs/resumes';
-
-                    $resume->storePubliclyAs($storage_path, $file_name, 'public');
-
-                    $resume_path = 'storage/' . $storage_path . '/' . $file_name;
-                    $emp_detail['resume_path'] = $resume_path;
-                } else {
-                    if (!empty($emp_detail['delete-resume'])) {
+                        // Delete Old Image
                         $existing_resume = $user->empDetail != null ? $user->empDetail->resume_path : '';
                         if (!empty($existing_resume)) {
                             $file_path = ltrim($existing_resume, 'storage/');
                             Storage::disk('public')->delete($file_path);
                         }
-                        $emp_detail['resume_path'] = null;
-                    }
-                }
 
-                // Save Staff (Employee) Details to database
-                // $user->empDetail()->create($emp_detail);
-                $user->empDetail()->updateOrCreate(
-                    ['user_id' => $user->id],
-                    $emp_detail
-                );
+                        $resume = $emp_detail['resume'];
+                        $extension = $resume->extension();
+                        $file_name = 'resume_' . $user->id . '_' . time() . '.' . $extension;
+                        $storage_path = 'user/docs/resumes';
+
+                        $resume->storePubliclyAs($storage_path, $file_name, 'public');
+
+                        $resume_path = 'storage/' . $storage_path . '/' . $file_name;
+                        $emp_detail['resume_path'] = $resume_path;
+                    } else {
+                        if (!empty($emp_detail['delete-resume'])) {
+                            $existing_resume = $user->empDetail != null ? $user->empDetail->resume_path : '';
+                            if (!empty($existing_resume)) {
+                                $file_path = ltrim($existing_resume, 'storage/');
+                                Storage::disk('public')->delete($file_path);
+                            }
+                            $emp_detail['resume_path'] = null;
+                        }
+                    }
+
+                    // Save Staff (Employee) Details to database
+                    // $user->empDetail()->create($emp_detail);
+                    $user->empDetail()->updateOrCreate(
+                        ['user_id' => $user->id],
+                        $emp_detail
+                    );
+                }
             }
 
             return redirect()->route('admin.users.index')->withSuccess('User Updated Successfully!');
@@ -362,6 +404,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $auth_user = Auth::user();
+
+        if ($auth_user->cannot('delete', $user)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $userName = $user->first_name . ' ' . $user->last_name;
             

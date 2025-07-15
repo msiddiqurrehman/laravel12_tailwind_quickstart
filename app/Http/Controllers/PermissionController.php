@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePermissionRequest;
 use App\Models\Permission;
 
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PermissionController extends Controller
@@ -16,6 +17,12 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('viewAny', Permission::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $permissions = Permission::orderByDesc('role_id')->simplePaginate(1000);
             return view('permissions.index', ['dataItems' => $permissions]);

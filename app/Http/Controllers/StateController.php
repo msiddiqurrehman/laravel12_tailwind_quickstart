@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateStateRequest;
 use App\Models\Country;
 use App\Models\State;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class StateController extends Controller
@@ -16,6 +17,12 @@ class StateController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('viewAny', State::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $states = State::orderBy('name')->simplePaginate(1000);
             return view('states.index', ['dataItems' => $states]);
@@ -31,6 +38,12 @@ class StateController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', State::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $countries = Country::orderBy('name')->get();
             return view(
@@ -48,6 +61,12 @@ class StateController extends Controller
      */
     public function store(StoreStateRequest $request)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', State::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $state_data = $request->validated();
             $state_data['created_by'] = $request->user()->id;
@@ -65,6 +84,12 @@ class StateController extends Controller
      */
     public function show(State $state)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('view', $state)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return redirect()->route('admin.states.index');
     }
 
@@ -73,6 +98,12 @@ class StateController extends Controller
      */
     public function edit(State $state)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $state)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $countries = Country::orderBy('name')->get();
             return view(
@@ -91,6 +122,12 @@ class StateController extends Controller
      */
     public function update(UpdateStateRequest $request, State $state)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $state)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $state_data = $request->validated();
             $state->fill($state_data);
@@ -108,6 +145,12 @@ class StateController extends Controller
      */
     public function destroy(State $state)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('delete', $state)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $stateName = $state->name;
             $state->delete();

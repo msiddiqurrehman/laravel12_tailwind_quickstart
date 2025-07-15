@@ -242,64 +242,72 @@
                                     User Type Specific Details
                                 </h3>
 
-                                <div id="user_type_staff_fields" x-show="selectedUserType == 1">
-                                    <!-- Designation -->
-                                    <div>
-                                        <x-input-label for="designation_id" :value="__('Designation')" />
+                                @can('create', App\Models\EmpDetail::class)
+                                    <div id="user_type_staff_fields" x-show="selectedUserType == 1">
+                                        <!-- Designation -->
+                                        <div>
+                                            <x-input-label for="designation_id" :value="__('Designation')" />
 
-                                        <x-select-input id="designation_id" name="emp_detail[designation_id]" ::disabled="selectedUserType != 1">
+                                            <x-select-input id="designation_id" name="emp_detail[designation_id]" ::disabled="selectedUserType != 1">
 
-                                            <x-select-option value="" text="Select Designation" />
+                                                <x-select-option value="" text="Select Designation" />
 
-                                            @foreach ($designations as $designation)
-                                                <x-select-option 
-                                                                value="{{ $designation->id }}" 
-                                                                text="{{ $designation->title }}"
-                                                                :is-selected="old('emp_detail.designation_id') == $designation->id"
-                                                />
-                                            @endforeach
+                                                @foreach ($designations as $designation)
+                                                    <x-select-option 
+                                                                    value="{{ $designation->id }}" 
+                                                                    text="{{ $designation->title }}"
+                                                                    :is-selected="old('emp_detail.designation_id') == $designation->id"
+                                                    />
+                                                @endforeach
 
-                                        </x-select-input>
+                                            </x-select-input>
 
-                                        <x-input-error class="mt-2" :messages="$errors->get('emp_detail.designation_id')" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('emp_detail.designation_id')" />
+                                        </div>
+
+                                        <!-- Referrer Name -->
+                                        <div>
+                                            <x-input-label for="referrer_name" :value="__('Referrer Name')" />
+
+                                            <x-text-input type="text" name="emp_detail[referrer_name]" id="referrer_name" placeholder="Referrer Name"
+                                                value="{{ old('emp_detail.referrer_name', '') }}" ::disabled="selectedUserType != 1"/>
+
+                                            <x-input-error class="mt-2" :messages="$errors->get('emp_detail.referrer_name')" />
+                                        </div>
+
+                                        <!-- Referrer Contact -->
+                                        <div>
+                                            <x-input-label for="referrer_contact" :value="__('Referrer Contact')" />
+
+                                            <x-text-input id="referrer_contact" name="emp_detail[referrer_contact]" type="text" placeholder="Referrer Contact"
+                                                :value="old('emp_detail.referrer_contact', '')" pattern="[0-9]{10,16}"
+                                                title="Contact no. format: - 9876543210 or 00919876543210" ::disabled="selectedUserType != 1"/>
+
+                                            <x-input-error class="mt-2" :messages="$errors->get('emp_detail.referrer_contact')" />
+                                        </div>
+
+                                        <!-- Identity Doc Image -->
+                                        <div class="max-w-[265px]">
+                                            <x-image-upload name="emp_detail[identity_document]" label="Choose Identity Document Image" ::disabled="selectedUserType != 1"/>
+                                        </div>
+
+                                        <!-- Education Doc Image -->
+                                        <div class="max-w-[275px]">
+                                            <x-image-upload name="emp_detail[education_document]" label="Choose Education Document Image" ::disabled="selectedUserType != 1"/>
+                                        </div>
+
+                                        <!-- Resume -->
+                                        <div class="max-w-36.5">
+                                            <x-image-upload name="emp_detail[resume]" label="Choose Resume (PDF)" fileAccept="application/pdf, .doc, .docx" ::isImageUpload="false" ::disabled="selectedUserType != 1"/>
+                                        </div>
                                     </div>
-
-                                    <!-- Referrer Name -->
-                                    <div>
-                                        <x-input-label for="referrer_name" :value="__('Referrer Name')" />
-
-                                        <x-text-input type="text" name="emp_detail[referrer_name]" id="referrer_name" placeholder="Referrer Name"
-                                            value="{{ old('emp_detail.referrer_name', '') }}" ::disabled="selectedUserType != 1"/>
-
-                                        <x-input-error class="mt-2" :messages="$errors->get('emp_detail.referrer_name')" />
+                                @else
+                                    <div id="user_type_staff_fields" x-show="selectedUserType == 1">
+                                        <span class="text-red-500">
+                                            You are not allowed to add employee details.
+                                        </span>
                                     </div>
-
-                                    <!-- Referrer Contact -->
-                                    <div>
-                                        <x-input-label for="referrer_contact" :value="__('Referrer Contact')" />
-
-                                        <x-text-input id="referrer_contact" name="emp_detail[referrer_contact]" type="text" placeholder="Referrer Contact"
-                                            :value="old('emp_detail.referrer_contact', '')" pattern="[0-9]{10,16}"
-                                            title="Contact no. format: - 9876543210 or 00919876543210" ::disabled="selectedUserType != 1"/>
-
-                                        <x-input-error class="mt-2" :messages="$errors->get('emp_detail.referrer_contact')" />
-                                    </div>
-
-                                    <!-- Identity Doc Image -->
-                                    <div class="max-w-[265px]">
-                                        <x-image-upload name="emp_detail[identity_document]" label="Choose Identity Document Image" ::disabled="selectedUserType != 1"/>
-                                    </div>
-
-                                    <!-- Education Doc Image -->
-                                    <div class="max-w-[275px]">
-                                        <x-image-upload name="emp_detail[education_document]" label="Choose Education Document Image" ::disabled="selectedUserType != 1"/>
-                                    </div>
-
-                                    <!-- Resume -->
-                                    <div class="max-w-36.5">
-                                        <x-image-upload name="emp_detail[resume]" label="Choose Resume (PDF)" fileAccept="application/pdf, .doc, .docx" ::isImageUpload="false" ::disabled="selectedUserType != 1"/>
-                                    </div>
-                                </div>
+                                @endcan
 
                                 <div id="user_type_partner_fields" x-show="selectedUserType == 2">
                                     <div class="dark:text-white/90">Partner details fields will go here...</div>

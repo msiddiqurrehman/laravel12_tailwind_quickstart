@@ -247,87 +247,95 @@
                                     User Type Specific Details
                                 </h3>
 
-                                <div id="user_type_staff_fields" x-show="selectedUserType == 1">
+                                @can('update', $item->empDetail)
+                                    <div id="user_type_staff_fields" x-show="selectedUserType == 1">
 
-                                    <!-- Designation -->
-                                    <div>
-                                        <x-input-label for="designation_id" :value="__('Designation')" />
+                                        <!-- Designation -->
+                                        <div>
+                                            <x-input-label for="designation_id" :value="__('Designation')" />
 
-                                        <x-select-input id="designation_id" name="emp_detail[designation_id]" ::disabled="selectedUserType != 1">
+                                            <x-select-input id="designation_id" name="emp_detail[designation_id]" ::disabled="selectedUserType != 1">
 
-                                            <x-select-option value="" text="Select Designation" />
+                                                <x-select-option value="" text="Select Designation" />
 
-                                            @foreach ($designations as $designation)
-                                                @php
-                                                    $user_designation = $item->empDetail != null ? $item->empDetail->designation_id : '';
-                                                @endphp
-                                                
-                                                <x-select-option 
-                                                                value="{{ $designation->id }}" 
-                                                                text="{{ $designation->title }}"
-                                                                :is-selected="old('emp_detail.designation_id', $user_designation) == $designation->id"
-                                                />
-                                            @endforeach
+                                                @foreach ($designations as $designation)
+                                                    @php
+                                                        $user_designation = $item->empDetail != null ? $item->empDetail->designation_id : '';
+                                                    @endphp
+                                                    
+                                                    <x-select-option 
+                                                                    value="{{ $designation->id }}" 
+                                                                    text="{{ $designation->title }}"
+                                                                    :is-selected="old('emp_detail.designation_id', $user_designation) == $designation->id"
+                                                    />
+                                                @endforeach
 
-                                        </x-select-input>
+                                            </x-select-input>
 
-                                        <x-input-error class="mt-2" :messages="$errors->get('emp_detail.designation_id')" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('emp_detail.designation_id')" />
+                                        </div>
+
+                                        <!-- Referrer Name -->
+                                        <div>
+                                            @php
+                                                $user_referrer_name = $item->empDetail != null ? $item->empDetail->referrer_name : '';
+                                            @endphp
+                                            <x-input-label for="referrer_name" :value="__('Referrer Name')" />
+
+                                            <x-text-input type="text" name="emp_detail[referrer_name]" id="referrer_name" placeholder="Referrer Name"
+                                                value="{{ old('emp_detail.referrer_name', $user_referrer_name) }}" ::disabled="selectedUserType != 1"/>
+
+                                            <x-input-error class="mt-2" :messages="$errors->get('emp_detail.referrer_name')" />
+                                        </div>
+
+                                        <!-- Referrer Contact -->
+                                        <div>
+                                            @php
+                                                $user_referrer_contact = $item->empDetail != null ? $item->empDetail->referrer_contact : '';
+                                            @endphp
+                                            <x-input-label for="referrer_contact" :value="__('Referrer Contact')" />
+
+                                            <x-text-input id="referrer_contact" name="emp_detail[referrer_contact]" type="text" placeholder="Referrer Contact"
+                                                :value="old('emp_detail.referrer_contact', $user_referrer_contact)" pattern="[0-9]{10,16}"
+                                                title="Contact no. format: - 9876543210 or 00919876543210" ::disabled="selectedUserType != 1"/>
+
+                                            <x-input-error class="mt-2" :messages="$errors->get('emp_detail.referrer_contact')" />
+                                        </div>
+
+                                        <!-- Identity Doc Image -->
+                                        <div class="max-w-[265px]">
+                                            <x-image-upload name="emp_detail[identity_document]" label="Choose Identity Document Image" ::disabled="selectedUserType != 1" oldImagePath="{{ $item->empDetail != null && !empty($item->empDetail->identity_document_path) ? asset($item->empDetail->identity_document_path) : '' }}">
+                                                <div class="py-2 my-3">
+                                                    <x-checkbox-input id="chk-delete-id-doc" name="emp_detail[delete-id-doc]" label="Delete Image" value="1" isChecked="{{ old('delete-id-doc') == 1 ? 'true' : 'false'}}" ::disabled="selectedUserType != 1" />
+                                                </div>
+                                            </x-image-upload>
+                                        </div>
+
+                                        <!-- Education Doc Image -->
+                                        <div class="max-w-[275px]">
+                                            <x-image-upload name="emp_detail[education_document]" label="Choose Education Document Image" ::disabled="selectedUserType != 1" oldImagePath="{{ $item->empDetail != null && !empty($item->empDetail->education_document_path) ? asset($item->empDetail->education_document_path) : '' }}">
+                                                <div class="py-2 my-3">
+                                                    <x-checkbox-input id="chk-delete-edu-doc" name="emp_detail[delete-edu-doc]" label="Delete Image" value="1" isChecked="{{ old('delete-edu-doc') == 1 ? 'true' : 'false'}}" ::disabled="selectedUserType != 1" />
+                                                </div>
+                                            </x-image-upload>
+                                        </div>
+
+                                        <!-- Resume -->
+                                        <div class="max-w-36.5">
+                                            <x-image-upload name="emp_detail[resume]" label="Choose Resume" fileAccept="application/pdf" :isImageUpload="false" ::disabled="selectedUserType != 1" oldImagePath="{{ $item->empDetail != null && !empty($item->empDetail->resume_path) ? asset($item->empDetail->resume_path) : '' }}">
+                                                <div class="py-2 my-3">
+                                                    <x-checkbox-input id="chk-delete-resume" name="emp_detail[delete-resume]" label="Delete Resume" value="1" isChecked="{{ old('delete-resume') == 1 ? 'true' : 'false'}}" ::disabled="selectedUserType != 1" />
+                                                </div>
+                                            </x-image-upload>
+                                        </div>
                                     </div>
-
-                                    <!-- Referrer Name -->
-                                    <div>
-                                        @php
-                                            $user_referrer_name = $item->empDetail != null ? $item->empDetail->referrer_name : '';
-                                        @endphp
-                                        <x-input-label for="referrer_name" :value="__('Referrer Name')" />
-
-                                        <x-text-input type="text" name="emp_detail[referrer_name]" id="referrer_name" placeholder="Referrer Name"
-                                            value="{{ old('emp_detail.referrer_name', $user_referrer_name) }}" ::disabled="selectedUserType != 1"/>
-
-                                        <x-input-error class="mt-2" :messages="$errors->get('emp_detail.referrer_name')" />
+                                @else
+                                    <div id="user_type_staff_fields" x-show="selectedUserType == 1">
+                                        <span class="text-red-500">
+                                            You are not allowed to edit employee details.
+                                        </span>
                                     </div>
-
-                                    <!-- Referrer Contact -->
-                                    <div>
-                                        @php
-                                            $user_referrer_contact = $item->empDetail != null ? $item->empDetail->referrer_contact : '';
-                                        @endphp
-                                        <x-input-label for="referrer_contact" :value="__('Referrer Contact')" />
-
-                                        <x-text-input id="referrer_contact" name="emp_detail[referrer_contact]" type="text" placeholder="Referrer Contact"
-                                            :value="old('emp_detail.referrer_contact', $user_referrer_contact)" pattern="[0-9]{10,16}"
-                                            title="Contact no. format: - 9876543210 or 00919876543210" ::disabled="selectedUserType != 1"/>
-
-                                        <x-input-error class="mt-2" :messages="$errors->get('emp_detail.referrer_contact')" />
-                                    </div>
-
-                                    <!-- Identity Doc Image -->
-                                    <div class="max-w-[265px]">
-                                        <x-image-upload name="emp_detail[identity_document]" label="Choose Identity Document Image" ::disabled="selectedUserType != 1" oldImagePath="{{ $item->empDetail != null && !empty($item->empDetail->identity_document_path) ? asset($item->empDetail->identity_document_path) : '' }}">
-                                            <div class="py-2 my-3">
-                                                <x-checkbox-input id="chk-delete-id-doc" name="emp_detail[delete-id-doc]" label="Delete Image" value="1" isChecked="{{ old('delete-id-doc') == 1 ? 'true' : 'false'}}" ::disabled="selectedUserType != 1" />
-                                            </div>
-                                        </x-image-upload>
-                                    </div>
-
-                                    <!-- Education Doc Image -->
-                                    <div class="max-w-[275px]">
-                                        <x-image-upload name="emp_detail[education_document]" label="Choose Education Document Image" ::disabled="selectedUserType != 1" oldImagePath="{{ $item->empDetail != null && !empty($item->empDetail->education_document_path) ? asset($item->empDetail->education_document_path) : '' }}">
-                                            <div class="py-2 my-3">
-                                                <x-checkbox-input id="chk-delete-edu-doc" name="emp_detail[delete-edu-doc]" label="Delete Image" value="1" isChecked="{{ old('delete-edu-doc') == 1 ? 'true' : 'false'}}" ::disabled="selectedUserType != 1" />
-                                            </div>
-                                        </x-image-upload>
-                                    </div>
-
-                                    <!-- Resume -->
-                                    <div class="max-w-36.5">
-                                        <x-image-upload name="emp_detail[resume]" label="Choose Resume" fileAccept="application/pdf" :isImageUpload="false" ::disabled="selectedUserType != 1" oldImagePath="{{ $item->empDetail != null && !empty($item->empDetail->resume_path) ? asset($item->empDetail->resume_path) : '' }}">
-                                            <div class="py-2 my-3">
-                                                <x-checkbox-input id="chk-delete-resume" name="emp_detail[delete-resume]" label="Delete Resume" value="1" isChecked="{{ old('delete-resume') == 1 ? 'true' : 'false'}}" ::disabled="selectedUserType != 1" />
-                                            </div>
-                                        </x-image-upload>
-                                    </div>
-                                </div>
+                                @endcan
 
                                 <div id="user_type_partner_fields" x-show="selectedUserType == 2">
                                     <div class="dark:text-white/90">Partner details fields will go here...</div>

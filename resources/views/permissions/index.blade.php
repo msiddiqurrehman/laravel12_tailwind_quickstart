@@ -15,12 +15,14 @@
                     <h3 class="text-theme-xl font-medium text-gray-800 dark:text-white/90">
                         Permissions
                     </h3>
-                    <a href="{{ route('admin.roles.create') }}" class="text-theme-lg font-medium text-gray-500 dark:text-white/90">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 inline -mt-0.5">
-                            <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                        </svg>
-                        Add New Role
-                    </a>
+                    @can('create', App\Models\Role::class)
+                        <a href="{{ route('admin.roles.create') }}" class="text-theme-lg font-medium text-gray-500 dark:text-white/90">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 inline -mt-0.5">
+                                <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+                            </svg>
+                            Add New Role
+                        </a>
+                    @endcan
                 </div>
                 <div class="p-5 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                     <div class="relative mb-2.5 pb-3">

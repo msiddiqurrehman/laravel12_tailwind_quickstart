@@ -18,10 +18,6 @@ class CountryController extends Controller
     public function index()
     {
         $user = Auth::user();
-
-        if(!$user->status) {
-            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
-        }
         
         if ($user->cannot('viewAny', Country::class)) {
             return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
@@ -44,10 +40,6 @@ class CountryController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user->status) {
-            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
-        }
-
         if ($user->cannot('create', Country::class)) {
             return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
         }
@@ -61,10 +53,6 @@ class CountryController extends Controller
     public function store(StoreCountryRequest $request)
     {
         $user = Auth::user();
-
-        if (!$user->status) {
-            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
-        }
 
         if ($user->cannot('create', Country::class)) {
             return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
@@ -89,10 +77,6 @@ class CountryController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user->status) {
-            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
-        }
-
         if ($user->cannot('view', $country)) {
             return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
         }
@@ -107,10 +91,6 @@ class CountryController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user->status) {
-            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
-        }
-
         if ($user->cannot('update', $country)) {
             return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
         }
@@ -124,10 +104,6 @@ class CountryController extends Controller
     public function update(UpdateCountryRequest $request, Country $country)
     {
         $user = Auth::user();
-
-        if (!$user->status) {
-            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
-        }
 
         if ($user->cannot('update', $country)) {
             return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
@@ -151,10 +127,6 @@ class CountryController extends Controller
     public function destroy(Country $country)
     {
         $user = Auth::user();
-
-        if (!$user->status) {
-            return redirect()->route('logout')->withErrors(["errors" => "You are not allowed to perform this action."]);
-        }
 
         if ($user->cannot('delete', $country)) {
             return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);

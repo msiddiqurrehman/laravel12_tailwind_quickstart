@@ -15,12 +15,14 @@
                     <h3 class="text-theme-xl font-medium text-gray-800 dark:text-white/90">
                         User Types
                     </h3>
-                    <a href="{{ route('admin.userTypes.create') }}" class="text-theme-lg font-medium text-gray-500 dark:text-white/90">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 inline -mt-0.5">
-                            <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                        </svg>
-                        Add New
-                    </a>
+                    @can('create', App\Models\UserType::class)
+                        <a href="{{ route('admin.userTypes.create') }}" class="text-theme-lg font-medium text-gray-500 dark:text-white/90">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 inline -mt-0.5">
+                                <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+                            </svg>
+                            Add New
+                        </a>
+                    @endcan
                 </div>
                 <div class="p-5 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                     <div class="relative mb-2.5 pb-3">
@@ -169,24 +171,29 @@
                                         </td>
                                         <td class="px-5 py-4 sm:px-6">
                                             <div class="flex items-center">
-                                                <a href="{{ route('admin.userTypes.edit', $item) }}" title="Edit" class="p-1 me-2.5 text-yellow-500">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
-                                                        <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
-                                                    </svg>                                              
-                                                </a>
-                                                <form action="{{ route('admin.userTypes.destroy', $item) }}" method="post" id="{{ 'form-delete-'.$item->id }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <a href="javascript:void(0);" title="Delete"
-                                                        @click="showConfirmDeleteModal = true; formToDeleteId='{{ 'form-delete-'.$item->id }}'; confirmModalMsg='Are you sure to delete user type <span class= \'font-medium \'>{{ $item->type }}</span>?'" 
-                                                        class="text-red-600"
-                                                    >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-                                                            <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
-                                                        </svg>
+                                                @can('update', $item)
+                                                    <a href="{{ route('admin.userTypes.edit', $item) }}" title="Edit" class="p-1 me-2.5 text-yellow-500">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                                            <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+                                                        </svg>                                              
                                                     </a>
-                                                    
-                                                </form>
+                                                @endcan
+                                                
+                                                @can('delete', $item)
+                                                    <form action="{{ route('admin.userTypes.destroy', $item) }}" method="post" id="{{ 'form-delete-'.$item->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <a href="javascript:void(0);" title="Delete"
+                                                            @click="showConfirmDeleteModal = true; formToDeleteId='{{ 'form-delete-'.$item->id }}'; confirmModalMsg='Are you sure to delete user type <span class= \'font-medium \'>{{ $item->type }}</span>?'" 
+                                                            class="text-red-600"
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                                                <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                                                            </svg>
+                                                        </a>
+                                                        
+                                                    </form>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>    

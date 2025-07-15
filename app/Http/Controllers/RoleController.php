@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Module;
 use App\Models\Permission;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
@@ -17,6 +18,12 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('viewAny', Role::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $roles = Role::where('id', '!=', '1')
                             ->where('id', '!=', '2')
@@ -35,6 +42,12 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', Role::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try{
             $modules = Module::where('slug', '!=', 'modules')
                                 ->where('slug', '!=', 'user_types')
@@ -54,6 +67,12 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('create', Role::class)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $role_data = $request->validated();
             $role_data['created_by'] = $request->user()->id;
@@ -90,6 +109,12 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('view', $role)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         return redirect()->route('admin.roles.index');
     }
 
@@ -98,6 +123,12 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $role)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try{
             $any_permission_model = Permission::first();
             $role_permissions = $role->permissions->keyBy('module_id')->toArray();
@@ -125,6 +156,12 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('update', $role)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $role_data = $request->validated();
 
@@ -164,6 +201,12 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $user = Auth::user();
+
+        if ($user->cannot('delete', $role)) {
+            return redirect()->route('admin.dashboard')->withErrors(["errors" => "You are not allowed to perform this action."]);
+        }
+
         try {
             $roleName = $role->title;
             $role->delete();
