@@ -19,22 +19,22 @@ class UserSeeder extends Seeder
             [
                 'first_name' => 'System',
                 'last_name' => 'Creator',
-                'email' => 'htnt_systemcreator@mailinator.com',
-                'password' => Hash::make('htnt_systemcreator'),
+                'email' => 'systemcreator@mailinator.com',
+                'password' => Hash::make('systemcreator'),
                 'created_by' => 1,
             ],
             [
                 'first_name' => 'Super',
                 'last_name' => 'Admin',
-                'email' => 'htnt_superadmin@mailinator.com',
-                'password' => Hash::make('htnt_superadmin'),
+                'email' => 'superadmin@mailinator.com',
+                'password' => Hash::make('superadmin'),
                 'created_by' => 1,
             ],
             [
                 'first_name' => 'Administrator',
                 'last_name' => '',
-                'email' => 'htnt_administrator@mailinator.com',
-                'password' => Hash::make('htnt_administrator'),
+                'email' => 'administrator@mailinator.com',
+                'password' => Hash::make('administrator'),
                 'created_by' => 1,
             ],
         ]);
