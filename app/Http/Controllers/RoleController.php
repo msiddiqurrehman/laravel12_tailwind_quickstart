@@ -88,13 +88,15 @@ class RoleController extends Controller
 
             $new_role = Role::create($role_data);
 
-            // $all_modules = Module::all();
-            // $new_role_permissions = [];
-            // foreach($all_modules as $module) {
-            //     $new_role_permissions[] = ['module_id' => $module->id, 'can_create' => 0, 'can_delete' => 0, 'can_edit' => 0, 'can_view' => 0, 'created_by' => $user_id];
-            // }
-            if (!empty($permissions))
-                $new_role->permissions()->createMany($permissions);
+            if ($user->can('create', Permission::class)) {
+                // $all_modules = Module::all();
+                // $new_role_permissions = [];
+                // foreach($all_modules as $module) {
+                //     $new_role_permissions[] = ['module_id' => $module->id, 'can_create' => 0, 'can_delete' => 0, 'can_edit' => 0, 'can_view' => 0, 'created_by' => $user_id];
+                // }
+                if (!empty($permissions))
+                    $new_role->permissions()->createMany($permissions);
+            }
 
             return redirect()->route('admin.roles.index')->withSuccess('Role Added Successfully!');
         } catch (Exception $e) {
@@ -165,29 +167,33 @@ class RoleController extends Controller
         try {
             $role_data = $request->validated();
 
-            if (!empty($role_data['permissions'])) {
-                $permissions = $role_data['permissions'];
-                $submitted_permissions = $role_data['permissions'];
-                $user_id = $request->user()->id;
-                $role_id = $role->id;
-                foreach ($permissions as $key => $permission) {
-                    // $permissions[$key]['role_id'] = $role_id;
-                    if(empty($permission['created_by']))
-                        $permissions[$key]['created_by'] = $user_id;
-                }
-                // dd($submitted_permissions, $permissions);
-            }
-
             $role->fill($role_data);
             $role->save();
 
-            if (!empty($permissions))
-                $role->permissions()->upsert(
-                                                $permissions,
-                                                ['role_id', 'module_id'], //Mysql ignores this argument and uses primary key (mostly 'id') element of array to detect existence of record
-                                                ['can_create', 'can_delete', 'can_edit', 'can_view']
-                                            );
+            $any_permission_model = Permission::first();
 
+            if ($user->can('update', $any_permission_model)) {
+
+                if (!empty($role_data['permissions'])) {
+                    $permissions = $role_data['permissions'];
+                    // $submitted_permissions = $role_data['permissions'];
+                    $user_id = $request->user()->id;
+                    // $role_id = $role->id;
+                    foreach ($permissions as $key => $permission) {
+                        // $permissions[$key]['role_id'] = $role_id;
+                        if(empty($permission['created_by']))
+                            $permissions[$key]['created_by'] = $user_id;
+                    }
+                    // dd($submitted_permissions, $permissions);
+                }
+
+                if (!empty($permissions))
+                    $role->permissions()->upsert(
+                                                    $permissions,
+                                                    ['role_id', 'module_id'], //Mysql ignores this argument and uses primary key (mostly 'id') element of array to detect existence of record
+                                                    ['can_create', 'can_delete', 'can_edit', 'can_view']
+                                                );
+            }
             return redirect()->route('admin.roles.index')->withSuccess('Role Updated Successfully!');
         } catch (Exception $e) {
             $logid = time();

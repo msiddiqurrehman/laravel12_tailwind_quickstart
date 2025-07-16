@@ -167,7 +167,7 @@
 
                                                         @if($item->creator->id != 1 && $item->creator->id != 2)
                                                             <span class="block text-gray-500 text-theme-sm dark:text-gray-400">
-                                                                {{ $item->creator && $item->creator->designation ? $item->creator->designation->title : '' }}
+                                                                {{ $item->creator && $item->creator->empDetail && $item->creator->empDetail->designation ? $item->creator->designation->title : '' }}
                                                             </span>
                                                         @endif
                                                     </div>
@@ -199,7 +199,7 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <a href="javascript:void(0);" title="Delete"
-                                                            @click="showConfirmDeleteModal = true; formToDeleteId='{{ 'form-delete-'.$item->id }}'; confirmModalMsg='Are you sure to delete country <span class= \'font-medium \'>{{ $item->name }}</span>?'" 
+                                                            @click="showConfirmDeleteModal = true; formToDeleteId='{{ 'form-delete-'.$item->id }}'; confirmModalMsg='Are you sure to delete country <span class= \'font-medium \'>{{ str_replace("'", "\'", $item->name) }}</span>?'" 
                                                             class="text-red-600"
                                                         >
                                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">

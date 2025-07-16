@@ -59,132 +59,138 @@
                             
                             <x-input-label :value="__('Role Permissions')"/>
 
-                            <div class="max-w-full overflow-x-auto">
-                                <table class="min-w-full">
-                                    <!-- table header start -->
-                                    <thead>
-                                        <tr class="border-b border-gray-100 dark:border-gray-800">
-                                            <th class="px-5 py-3 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                        Module
-                                                    </p>
-                                                </div>
-                                            </th>
-                                            <th class="px-5 py-3 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                        View
-                                                    </p>
-                                                </div>
-                                            </th>
-                                            <th class="px-5 py-3 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                        Create
-                                                    </p>
-                                                </div>
-                                            </th>
-                                            <th class="px-5 py-3 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                        Edit
-                                                    </p>
-                                                </div>
-                                            </th>
-                                            <th class="px-5 py-3 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <p class="font-semibold text-gray-700 dark:text-gray-400">
-                                                        Delete
-                                                    </p>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <!-- table header end -->
-                                    <!-- table body start -->
-                                    <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                        @foreach ($modules as $module)
-                                        <tr>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <span class="text-gray-600 dark:text-gray-400">
-                                                    {{ $module->name }}
-                                                </span>
-                                                <input type="hidden" name="{{ 'permissions['.$module->id.'][module_id]' }}" 
-                                                        value="{{ $module->id }}"/>
-                                                @php
-                                                $permission_id = isset($role_permissions[$module->id]) ? 
-                                                                    $role_permissions[$module->id]["id"] : '';
-                                                $created_by = isset($role_permissions[$module->id]) ? 
-                                                                    $role_permissions[$module->id]["created_by"] : '';
-                                                @endphp
-                                                <input type="hidden" name="{{ 'permissions['.$module->id.'][id]' }}" 
-                                                    value="{{ $permission_id }}"/>
-                                                
-                                                <input type="hidden" name="{{ 'permissions['.$module->id.'][created_by]' }}" 
-                                                    value="{{ $created_by }}"/>
-                                            </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                @php
-                                                    $permission_name = "permissions[".$module->id."][can_view]";
-                                                    $permission_name_for_old = "permissions.".$module->id.".can_view";
-                                                    $current_can_view = isset($role_permissions[$module->id]) ? 
-                                                                                    $role_permissions[$module->id]["can_view"] : '0';
-                                                @endphp
-                                                <x-toggle-switch 
-                                                    name="{{ $permission_name }}"
-                                                    id="{{ $permission_name_for_old }}" 
-                                                    label="" 
-                                                    checked="{{ (bool)old($permission_name_for_old, $current_can_view) }}"
-                                                />
-                                            </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                @php
-                                                    $permission_name = "permissions[".$module->id."][can_create]";
-                                                    $permission_name_for_old = "permissions.".$module->id.".can_create";
-                                                    $current_can_create = isset($role_permissions[$module->id]) ? 
-                                                                                    $role_permissions[$module->id]["can_create"] : '0';
-                                                @endphp
-                                                <x-toggle-switch 
-                                                    name="{{ $permission_name }}"
-                                                    id="{{ $permission_name_for_old }}" 
-                                                    label="" 
-                                                    checked="{{ (bool)old($permission_name_for_old, $current_can_create) }}"
-                                                />
-                                            </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                @php
-                                                    $permission_name = "permissions[".$module->id."][can_edit]";
-                                                    $permission_name_for_old = "permissions.".$module->id.".can_edit";
-                                                    $current_can_edit = isset($role_permissions[$module->id]) ? 
-                                                                                    $role_permissions[$module->id]["can_edit"] : '0';
-                                                @endphp
-                                                <x-toggle-switch 
-                                                    name="{{ $permission_name }}"
-                                                    id="{{ $permission_name_for_old }}" 
-                                                    label="" 
-                                                    checked="{{ (bool)old($permission_name_for_old, $current_can_edit) }}"
-                                                />
-                                            </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                @php
-                                                    $permission_name = "permissions[".$module->id."][can_delete]";
-                                                    $permission_name_for_old = "permissions.".$module->id.".can_delete";
-                                                    $current_can_delete = isset($role_permissions[$module->id]) ? 
-                                                                                    $role_permissions[$module->id]["can_delete"] : '0';
-                                                @endphp
-                                                <x-toggle-switch 
-                                                    name="{{ $permission_name }}"
-                                                    id="{{ $permission_name_for_old }}" 
-                                                    label="" 
-                                                    checked="{{ (bool)old($permission_name_for_old, $current_can_delete) }}"
-                                                />
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                            @can('update', $any_permission_model)
+                                <div class="max-w-full overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <!-- table header start -->
+                                        <thead>
+                                            <tr class="border-b border-gray-100 dark:border-gray-800">
+                                                <th class="px-5 py-3 sm:px-6">
+                                                    <div class="flex items-center">
+                                                        <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                            Module
+                                                        </p>
+                                                    </div>
+                                                </th>
+                                                <th class="px-5 py-3 sm:px-6">
+                                                    <div class="flex items-center">
+                                                        <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                            View
+                                                        </p>
+                                                    </div>
+                                                </th>
+                                                <th class="px-5 py-3 sm:px-6">
+                                                    <div class="flex items-center">
+                                                        <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                            Create
+                                                        </p>
+                                                    </div>
+                                                </th>
+                                                <th class="px-5 py-3 sm:px-6">
+                                                    <div class="flex items-center">
+                                                        <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                            Edit
+                                                        </p>
+                                                    </div>
+                                                </th>
+                                                <th class="px-5 py-3 sm:px-6">
+                                                    <div class="flex items-center">
+                                                        <p class="font-semibold text-gray-700 dark:text-gray-400">
+                                                            Delete
+                                                        </p>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <!-- table header end -->
+                                        <!-- table body start -->
+                                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                                            @foreach ($modules as $module)
+                                            <tr>
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    <span class="text-gray-600 dark:text-gray-400">
+                                                        {{ $module->name }}
+                                                    </span>
+                                                    <input type="hidden" name="{{ 'permissions['.$module->id.'][module_id]' }}" 
+                                                            value="{{ $module->id }}"/>
+                                                    @php
+                                                    $permission_id = isset($role_permissions[$module->id]) ? 
+                                                                        $role_permissions[$module->id]["id"] : '';
+                                                    $created_by = isset($role_permissions[$module->id]) ? 
+                                                                        $role_permissions[$module->id]["created_by"] : '';
+                                                    @endphp
+                                                    <input type="hidden" name="{{ 'permissions['.$module->id.'][id]' }}" 
+                                                        value="{{ $permission_id }}"/>
+                                                    
+                                                    <input type="hidden" name="{{ 'permissions['.$module->id.'][created_by]' }}" 
+                                                        value="{{ $created_by }}"/>
+                                                </td>
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    @php
+                                                        $permission_name = "permissions[".$module->id."][can_view]";
+                                                        $permission_name_for_old = "permissions.".$module->id.".can_view";
+                                                        $current_can_view = isset($role_permissions[$module->id]) ? 
+                                                                                        $role_permissions[$module->id]["can_view"] : '0';
+                                                    @endphp
+                                                    <x-toggle-switch 
+                                                        name="{{ $permission_name }}"
+                                                        id="{{ $permission_name_for_old }}" 
+                                                        label="" 
+                                                        checked="{{ (bool)old($permission_name_for_old, $current_can_view) }}"
+                                                    />
+                                                </td>
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    @php
+                                                        $permission_name = "permissions[".$module->id."][can_create]";
+                                                        $permission_name_for_old = "permissions.".$module->id.".can_create";
+                                                        $current_can_create = isset($role_permissions[$module->id]) ? 
+                                                                                        $role_permissions[$module->id]["can_create"] : '0';
+                                                    @endphp
+                                                    <x-toggle-switch 
+                                                        name="{{ $permission_name }}"
+                                                        id="{{ $permission_name_for_old }}" 
+                                                        label="" 
+                                                        checked="{{ (bool)old($permission_name_for_old, $current_can_create) }}"
+                                                    />
+                                                </td>
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    @php
+                                                        $permission_name = "permissions[".$module->id."][can_edit]";
+                                                        $permission_name_for_old = "permissions.".$module->id.".can_edit";
+                                                        $current_can_edit = isset($role_permissions[$module->id]) ? 
+                                                                                        $role_permissions[$module->id]["can_edit"] : '0';
+                                                    @endphp
+                                                    <x-toggle-switch 
+                                                        name="{{ $permission_name }}"
+                                                        id="{{ $permission_name_for_old }}" 
+                                                        label="" 
+                                                        checked="{{ (bool)old($permission_name_for_old, $current_can_edit) }}"
+                                                    />
+                                                </td>
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    @php
+                                                        $permission_name = "permissions[".$module->id."][can_delete]";
+                                                        $permission_name_for_old = "permissions.".$module->id.".can_delete";
+                                                        $current_can_delete = isset($role_permissions[$module->id]) ? 
+                                                                                        $role_permissions[$module->id]["can_delete"] : '0';
+                                                    @endphp
+                                                    <x-toggle-switch 
+                                                        name="{{ $permission_name }}"
+                                                        id="{{ $permission_name_for_old }}" 
+                                                        label="" 
+                                                        checked="{{ (bool)old($permission_name_for_old, $current_can_delete) }}"
+                                                    />
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <span class="text-red-500">
+                                    You are not allowed to edit permissions.
+                                </span>
+                            @endcan
                         </div>
                         <!-- ====== Table End -->
 

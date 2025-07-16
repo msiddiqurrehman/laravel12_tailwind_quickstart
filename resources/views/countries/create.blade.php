@@ -94,7 +94,7 @@
                         </div>
 
                         <div class="flex items-center justify-start mt-4">
-                            <x-secondary-link-button href="{{ route('admin.designations.index') }}">
+                            <x-secondary-link-button href="{{ route('admin.countries.index') }}">
                                 Cancel
                             </x-secondary-link-button>
                 
