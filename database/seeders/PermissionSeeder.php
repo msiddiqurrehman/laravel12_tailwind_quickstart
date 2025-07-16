@@ -23,6 +23,7 @@ class PermissionSeeder extends Seeder
             ['role_id' => 1, 'module_id' => 6, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
             ['role_id' => 1, 'module_id' => 7, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
             ['role_id' => 1, 'module_id' => 8, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
+            ['role_id' => 1, 'module_id' => 9, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
                         
             ['role_id' => 2, 'module_id' => 1, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
             ['role_id' => 2, 'module_id' => 2, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
@@ -32,6 +33,7 @@ class PermissionSeeder extends Seeder
             ['role_id' => 2, 'module_id' => 6, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
             ['role_id' => 2, 'module_id' => 7, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
             ['role_id' => 2, 'module_id' => 8, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
+            ['role_id' => 2, 'module_id' => 9, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
 
             ['role_id' => 3, 'module_id' => 3, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
             ['role_id' => 3, 'module_id' => 4, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
@@ -39,6 +41,7 @@ class PermissionSeeder extends Seeder
             ['role_id' => 3, 'module_id' => 6, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
             ['role_id' => 3, 'module_id' => 7, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
             ['role_id' => 3, 'module_id' => 8, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
+            ['role_id' => 3, 'module_id' => 9, 'can_create' => 1, 'can_delete' => 1, 'can_edit' => 1, 'can_view' => 1, 'created_by' => 1],
         ]);
     }
 }

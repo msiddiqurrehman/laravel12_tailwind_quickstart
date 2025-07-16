@@ -34,10 +34,22 @@ class AuthenticatedSessionController extends Controller
          * url()->previousPath() == "/connect/administrator/login" 
          */
 
-        if($request->user()->isUserAdmin() && url()->previousPath() == "/connect/administrator/login")
-            $route = 'admin.dashboard';
-        else
+        if($request->user()->isUserAdmin()) {
+            if(url()->previousPath() == "/connect/administrator/login") {
+                $route = 'admin.dashboard';
+            } else {
+                // logout admin user if trying to login from non-admin login form.
+                Auth::guard('web')->logout();
+
+                $request->session()->invalidate();
+
+                $request->session()->regenerateToken();
+
+                return redirect('/')->withErrors(['auth_error' => 'Invalid login credentials.']);
+            }
+        } else {
             $route = 'dashboard';
+        }
 
         return redirect()->intended(route($route, absolute: false));
     }
