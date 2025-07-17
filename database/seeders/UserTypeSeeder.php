@@ -21,5 +21,7 @@ class UserTypeSeeder extends Seeder
         ]);
 
         DB::table('users')->whereIn('id', [1, 2, 3])->update(['user_type_id' => 1]);
+        DB::table('users')->whereIn('id', [4])->update(['user_type_id' => 2]);
+        DB::table('users')->whereIn('id', [5])->update(['user_type_id' => 3]);
     }
 }
