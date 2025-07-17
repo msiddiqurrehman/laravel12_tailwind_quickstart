@@ -1,3 +1,4 @@
 *
 !seeder_data/
+!seeder_data/*
 !.gitignore
