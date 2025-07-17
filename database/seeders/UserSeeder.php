@@ -47,8 +47,8 @@ class UserSeeder extends Seeder
             [
                 'first_name' => 'Customer',
                 'last_name' => 'LName',
-                'email' => 'cusomer_lname@mailinator.com',
-                'password' => Hash::make('cusomer_lname'),
+                'email' => 'customer_lname@mailinator.com',
+                'password' => Hash::make('customer_lname'),
                 'created_by' => 1,
             ],
         ]);
