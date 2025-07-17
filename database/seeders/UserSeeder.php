@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
                 'email' => 'systemcreator@mailinator.com',
                 'password' => Hash::make('systemcreator'),
                 'created_by' => 1,
+                'user_type_id' => null,
             ],
             [
                 'first_name' => 'Super',
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
                 'email' => 'superadmin@mailinator.com',
                 'password' => Hash::make('superadmin'),
                 'created_by' => 1,
+                'user_type_id' => null,
             ],
             [
                 'first_name' => 'Administrator',
@@ -36,6 +38,7 @@ class UserSeeder extends Seeder
                 'email' => 'administrator@mailinator.com',
                 'password' => Hash::make('administrator'),
                 'created_by' => 1,
+                'user_type_id' => null,
             ],
             [
                 'first_name' => 'Partner',
@@ -43,6 +46,7 @@ class UserSeeder extends Seeder
                 'email' => 'partner_lname@mailinator.com',
                 'password' => Hash::make('partner_lname'),
                 'created_by' => 1,
+                'user_type_id' => null,
             ],
             [
                 'first_name' => 'Customer',
@@ -50,6 +54,7 @@ class UserSeeder extends Seeder
                 'email' => 'customer_lname@mailinator.com',
                 'password' => Hash::make('customer_lname'),
                 'created_by' => 1,
+                'user_type_id' => null,
             ],
         ]);
     }
