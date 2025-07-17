@@ -17,7 +17,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
 
 Route::middleware('guest')->group(function () {
-    Route::get('connect/administrator/login', [AuthenticatedSessionController::class, 'create'])
+    Route::get('administrator/login', [AuthenticatedSessionController::class, 'create'])
         ->name('admin.login');
 });
 

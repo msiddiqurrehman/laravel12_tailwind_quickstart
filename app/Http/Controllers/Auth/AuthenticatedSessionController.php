@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
          */
 
         if($request->user()->isUserAdmin()) {
-            if(url()->previousPath() == "/connect/administrator/login") {
+            if(url()->previousPath() == "/administrator/login") {
                 $route = 'admin.dashboard';
             } else {
                 // logout admin user if trying to login from non-admin login form.
@@ -47,8 +47,23 @@ class AuthenticatedSessionController extends Controller
 
                 return redirect('/')->withErrors(['auth_error' => 'Invalid login credentials.']);
             }
+        } elseif($request->user()->isUserPartner()) {
+            $route = 'dashboard'; // Set Dashboard route for partner type user.
         } else {
-            $route = 'dashboard';
+            if ($request->user()->isUserCustomer()) {
+                if (url()->previousPath() == "/login") {
+                    $route = 'dashboard';
+                } else {
+                    // logout admin user if trying to login from non-admin login form.
+                    Auth::guard('web')->logout();
+
+                    $request->session()->invalidate();
+
+                    $request->session()->regenerateToken();
+
+                    return redirect('/')->withErrors(['auth_error' => 'Invalid login credentials.']);
+                }
+            }
         }
 
         return redirect()->intended(route($route, absolute: false));
