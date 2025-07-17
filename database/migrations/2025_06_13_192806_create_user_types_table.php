@@ -21,7 +21,7 @@ return new class extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('user_type_id')->nullable()->default(3)->after('id')
+            $table->foreignId('user_type_id')->nullable()->after('id')
                                         ->comment('Foreign key to user_types.id')
                                         ->constrained()->onUpdate('cascade')->nullOnDelete();
         });
